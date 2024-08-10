@@ -4,6 +4,7 @@ a community made gradient application for arc
 first clone this github repo
 ```
 git clone https://github.com/neurokitti/arc_gradient.git
+cd arc_gradient
 ```
 next create a virtual environment
 ```

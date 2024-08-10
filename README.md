@@ -15,3 +15,8 @@ finnaly install the requirments.txt file
 ```
 pip install -r requirments.txt
 ```
+## usage
+to run the program
+```
+python main.py
+```

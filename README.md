@@ -16,7 +16,7 @@ finnaly install the requirments.txt file
 pip install -r requirments.txt
 ```
 ## usage
-to run the program
+to run the program by running the run.bat file or using python in the terminal
 ```
 python main.py
 ```

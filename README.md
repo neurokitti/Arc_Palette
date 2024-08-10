@@ -5,7 +5,12 @@ first clone this github repo
 ```
 git clone https://github.com/neurokitti/arc_gradient.git
 ```
+next create a virtual environment
 ```
 python -m venv myenv
 myenv\Scripts\activate
+```
+finnaly install the requirments.txt file
+```
+pip install -r requirments.txt
 ```

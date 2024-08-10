@@ -1,5 +1,10 @@
 # arc_gradient
 a community made gradient application for arc
+
+
+https://github.com/user-attachments/assets/131b40f2-f340-43f9-9c3c-3024be636a65
+
+
 ## Instilation
 first clone this github repo
 ```

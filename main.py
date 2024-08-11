@@ -190,6 +190,7 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.geometry("350x450")
     root.iconbitmap('resources\icon.ico')
+    root.title('Arc Gradient')
 
     canvas_h = 320
     canvas_w = 320

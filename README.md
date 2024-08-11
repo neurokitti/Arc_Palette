@@ -23,7 +23,7 @@ pip install -r requirments.txt
 Note: this program works best when windows walpaper settings is set to stretch
 arc should be set to mica
 and the theme should be set to transparent
-![image](https://github.com/user-attachments/assets/0738db74-c64a-432a-b5ab-e532ef8505cd)
+
 
 ## usage
 to run the program by running the **run.bat** file or using python in the terminal

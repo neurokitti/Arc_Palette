@@ -8,7 +8,7 @@ https://github.com/user-attachments/assets/131b40f2-f340-43f9-9c3c-3024be636a65
 
 In order to install Arc Palette, simply follow these steps:
 
-# Simple Installation
+### Simple Installation
 This is the easy version of the installation for users that are not experienced with applications such as Command Prompt or Powershell.
 
 1. Download the file in this repo named "setup.bat"
@@ -19,7 +19,7 @@ This is the easy version of the installation for users that are not experienced 
 
 OR
 
-# Advanced Installation
+### Advanced Installation
 This is version of the installation for more advanced users who know what they are doing when it comes to applications such as Command Prompt and Powershell.
    
 1. Clone the GitHub repository:

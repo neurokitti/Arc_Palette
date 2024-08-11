@@ -1,10 +1,16 @@
 @echo off
 
+git clone https://github.com/neurokitti/arc_gradient.git
+
+cd arc_gradient
+
 python -m venv myenv
 
 call myenv\Scripts\activate
 
 pip install -r requirements.txt
+
+python main.py
 
 echo.
 echo Installation complete! 

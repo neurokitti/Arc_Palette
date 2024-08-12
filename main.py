@@ -2,14 +2,16 @@ import ttkbootstrap as tb
 from ttkbootstrap import Style
 from ttkbootstrap.widgets import Meter
 import tkinter as tk
+import sv_ttk
 import math
 from PIL import Image, ImageTk, ImageDraw
-import ctypes # ignor this one im gonna remove it 
+import ctypes # ignor this one im gonna remove it
 import os
 from threading import Thread
 import random
 from tkinter import ttk
 from Arc_API.Arc_API import arc_API
+
 class color_picker:
     def __init__(self,canvas_frame, size,arc_api, max_colors=10, tab=0):
         self.tab = tab
@@ -213,7 +215,7 @@ def add_tab(arc_api):
     canvas_w = 320
     
     tab = ttk.Frame(notebook)
-    notebook.add(tab, text=f"space {tab_count + 1}")
+    notebook.add(tab, text=f"Space {tab_count + 1}")
     
     # Add some content to the new tab
     color_pick_frame = tk.Frame(tab)
@@ -259,7 +261,8 @@ if __name__ == "__main__":
     notebook.pack(fill='both', expand=True)
     for i in range(spaces_num):
         add_tab(arc_api)
-    check_box = tk.Checkbutton(text="auto restart Arc",var=var)
-    check_box.pack()
+    check_box = tk.Checkbutton(root, text="Auto Restart Arc", var=var)
+    check_box.pack() 
     #update_spaces_count()
+    sv_ttk.set_theme("light")
     root.mainloop()

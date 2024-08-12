@@ -183,10 +183,18 @@ class color_picker:
     def set_theme(self,):
         print(self.tab)
         colors = []
+        print(auto_launch_var.get())
+        if auto_launch_var.get() == 1:
+            arc_api.close_arc()
+            print('WHAAAAAT')
+            arc_api.kill_arc()
         for id, cirlce in enumerate(self.circles):
             if id < len(self.gradient_points):
                 colors.append((cirlce['rgb'][0],cirlce['rgb'][1],cirlce['rgb'][2],1))
         self.arc_api.set_space_theme_color(self.tab,"blendedGradient",colors,"light",intensityFactor=0.7)
+        if auto_launch_var.get() == 1:
+            arc_api.open_arc()
+        print('ACUALRJALSDK ASLDASDADASDASD')
 
 
 
@@ -207,7 +215,6 @@ def add_tab(arc_api):
     global tab_count
     canvas_h = 320
     canvas_w = 320
-    
     tab = ttk.Frame(notebook)
     notebook.add(tab, text=f"space {tab_count + 1}")
     
@@ -226,28 +233,13 @@ def add_tab(arc_api):
     plus_button.pack(pady=10,padx=5,side="right")
     tab_count += 1
 
-"""def update_spaces_count():
-    global tab_count, spaces_num, notebook
-    arc_api = arc_API()
-    new_spaces_num = arc_api.get_number_of_spaces()
-    print(spaces_num,new_spaces_num)
-    if new_spaces_num > spaces_num:
-        for i in range(new_spaces_num - spaces_num):
-            add_tab(arc_api)
-    if new_spaces_num < spaces_num:
-        print("NEED TO DELEAST")
-
-
-    spaces_num = new_spaces_num
-    
-    root.after(100, update_spaces_count)"""
-
 if __name__ == "__main__":
-    global tab_count, spaces_num, notebook
+
     tab_count = 0
     root = tk.Tk()
     arc_api = arc_API()
     spaces_num = arc_api.get_number_of_spaces()
+    checkbox_var = tk.IntVar()
     
     root.iconbitmap('resources\icon.ico')
     root.title('Arc Palette')
@@ -255,6 +247,8 @@ if __name__ == "__main__":
     notebook.pack(fill='both', expand=True)
     for i in range(spaces_num):
         add_tab(arc_api)
-    
+    auto_launch_var = tk.IntVar()
+    auto_restart_button = tk.Checkbutton(text="Auto restart",variable=auto_launch_var,)
+    auto_restart_button.pack()
     #update_spaces_count()
     root.mainloop()

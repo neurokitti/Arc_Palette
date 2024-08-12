@@ -59,5 +59,6 @@ This is version of the installation for more advanced users who know what they a
 You can run the program by either executing the **run.bat** file or using Python in the terminal:
 
 ```bash
+.venv\Scripts\activate 
 python main.py
 ```

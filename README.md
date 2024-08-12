@@ -2,7 +2,10 @@
 
 Arc Palette is a community-developed application that applies gradient effects similar to the ones seen on the macOS version of Arc on Windows
 
-https://github.com/user-attachments/assets/131b40f2-f340-43f9-9c3c-3024be636a65
+
+
+https://github.com/user-attachments/assets/63bdb73e-7459-4170-a98f-2b29670de21b
+
 
 ## Installation
 

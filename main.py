@@ -2,14 +2,15 @@ import ttkbootstrap as tb
 from ttkbootstrap import Style
 from ttkbootstrap.widgets import Meter
 import tkinter as tk
+import sv_ttk
 import math
 from PIL import Image, ImageTk, ImageDraw
-import ctypes # ignor this one im gonna remove it 
 import os
 from threading import Thread
 import random
 from tkinter import ttk
 from Arc_API.Arc_API import arc_API
+
 class color_picker:
     def __init__(self,canvas_frame, size,arc_api, max_colors=10, tab=0):
         self.tab = tab
@@ -137,49 +138,6 @@ class color_picker:
     def create_smooth_radial_gradient_thread(self,):
         thread = Thread(target=self.create_smooth_radial_gradient)
         thread.start()
-    def create_smooth_radial_gradient(self,):
-        width, height = self.gradient_size
-        color_positions = []
-        for id, cirlce in enumerate(self.circles):
-            if id < len(self.gradient_points):
-                color_positions.append((self.gradient_points[id], cirlce['rgb']))
-            else:
-                color_positions.append(((random.randint(0, width),random.randint(0, height)), cirlce['rgb']))
-        image = Image.new('RGB', self.gradient_size, (255, 255, 255))
-        draw = ImageDraw.Draw(image)
-        
-        for x in range(width):
-            for y in range(height):
-                weights = []
-                weight_sum = 0
-                
-                for pos, color in color_positions:
-                    dist = math.sqrt((x - pos[0])**2 + (y - pos[1])**2)
-                    weight = 1 / (dist + 1)**2  # Adding 1 to avoid division by zero
-                    weights.append((weight, color))
-                    weight_sum += weight
-                
-                r, g, b = 0, 0, 0
-                for weight, color in weights:
-                    normalized_weight = weight / weight_sum
-                    r += color[0] * normalized_weight
-                    g += color[1] * normalized_weight
-                    b += color[2] * normalized_weight
-                
-                draw.point((x, y), (int(r), int(g), int(b)))
-        image.save('resources\gradient_wallpaper.png')
-        self.set_wallpaper('resources\gradient_wallpaper.png')
-        return image
-    def set_wallpaper(self,image_path):
-        # Convert the path to an absolute path
-        image_path = os.path.abspath(image_path)
-        
-        # Check if the file exists
-        if not os.path.isfile(image_path):
-            raise FileNotFoundError(f"No such file: '{image_path}'")
-        
-        # Use the Windows API to set the wallpaper
-        ctypes.windll.user32.SystemParametersInfoW(20, 0, image_path, 3)
     def set_theme(self,):
         print(self.tab)
         colors = []
@@ -189,7 +147,13 @@ class color_picker:
         for id, cirlce in enumerate(self.circles):
             if id < len(self.gradient_points):
                 colors.append((cirlce['rgb'][0],cirlce['rgb'][1],cirlce['rgb'][2],1))
-        self.arc_api.set_space_theme_color(self.tab,"blendedGradient",colors,"light",intensityFactor=0.7)
+        print(len(colors))
+        if len(colors) < 2:
+            print("single color")
+            print(colors)
+            self.arc_api.set_space_theme_color(self.tab,"blendedSingleColor",colors,"dark",intensityFactor=1)
+        else:
+            self.arc_api.set_space_theme_color(self.tab,"blendedGradient",colors,"light",intensityFactor=1)
         if var.get() == 1:
             arc_api.open_arc()
 
@@ -213,21 +177,21 @@ def add_tab(arc_api):
     canvas_w = 320
     
     tab = ttk.Frame(notebook)
-    notebook.add(tab, text=f"space {tab_count + 1}")
+    notebook.add(tab, text=f"Space {tab_count + 1}")
     
     # Add some content to the new tab
-    color_pick_frame = tk.Frame(tab)
+    color_pick_frame = tk.Frame(tab,)
     color_pick_frame.pack(side="top")
     color_pick = color_picker(color_pick_frame, (canvas_w, canvas_h), arc_api, tab=tab_count)
-    button_frame = tk.Frame(tab)
+    button_frame = ttk.Frame(tab,)
     button_frame.pack(side="top")
     minus_button = ImageButton(button_frame, r"resources\minus_button.png", color_pick.remove_color)
-    minus_button.pack(pady=10,padx=5,side="left")
+    minus_button.pack(pady=5,padx=5,side="left")
     
     theme_button = ImageButton(button_frame, r"resources/wallpaper_set.png", color_pick.set_theme)
-    theme_button.pack(pady=10,padx=5,side="left",)
+    theme_button.pack(pady=5,padx=5,side="left",)
     plus_button = ImageButton(button_frame, r"resources\plus_button.png", color_pick.add_color)
-    plus_button.pack(pady=10,padx=5,side="right")
+    plus_button.pack(pady=5,padx=5,side="right")
     tab_count += 1
 
 """def update_spaces_count():
@@ -255,11 +219,13 @@ if __name__ == "__main__":
     var = tk.IntVar()
     root.iconbitmap('resources\icon.ico')
     root.title('Arc Palette')
+    root.geometry("340x450")
     notebook = ttk.Notebook(root)
     notebook.pack(fill='both', expand=True)
     for i in range(spaces_num):
         add_tab(arc_api)
-    check_box = tk.Checkbutton(text="auto restart Arc",var=var)
+    check_box = ttk.Checkbutton(root, text="Auto Restart Arc",var=var)
     check_box.pack()
     #update_spaces_count()
+    sv_ttk.set_theme("light")
     root.mainloop()

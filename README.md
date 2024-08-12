@@ -7,6 +7,8 @@ Arc Palette is a community-developed application that applies gradient effects s
 https://github.com/user-attachments/assets/63bdb73e-7459-4170-a98f-2b29670de21b
 
 
+
+**IMPORTANT: arc must be closed for changes to take effect. so close arc, apply the theme then reopen arc**
 ## Installation
 
 In order to install Arc Palette, simply follow these steps:

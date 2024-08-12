@@ -4,16 +4,18 @@ from ttkbootstrap.widgets import Meter
 import tkinter as tk
 import math
 from PIL import Image, ImageTk, ImageDraw
-import ctypes
+import ctypes # ignor this one im gonna remove it 
 import os
 from threading import Thread
 import random
-
+from tkinter import ttk
+from Arc_API.Arc_API import arc_API
 class color_picker:
-    def __init__(self,canvas_frame, size, max_colors=10,):
+    def __init__(self,canvas_frame, size,arc_api, max_colors=10, tab=0):
+        self.tab = tab
         self.width, self.height = size
         self.canvas = tk.Canvas(canvas_frame, width=self.width, height=self.height, )
-        
+        self.arc_api = arc_api
         self.center_x = self.width / 2
         self.center_y = self.height / 2
         self.circles = []
@@ -41,8 +43,7 @@ class color_picker:
     def on_canvas_click(self,event):
         x = min(max(event.x, 0), self.width)
         y = min(max(event.y, 0), self.height)
-        if len(self.circles) == 0:
-            self.add_color(x=x,y=y)
+        
         rgb = self.get_rgb_at_coordinate(x, y)
         for circle in self.circles:
                 if self.is_within_circle(event.x, event.y, circle):
@@ -50,7 +51,8 @@ class color_picker:
                     break
                 else:
                     self.current_circle = None
-
+        if self.current_circle == None:
+            self.add_color(x=x,y=y)
         if self.current_circle and self.current_circle['id'] is not None:
             self.canvas.delete(self.current_circle['id'])
 
@@ -178,34 +180,81 @@ class color_picker:
         
         # Use the Windows API to set the wallpaper
         ctypes.windll.user32.SystemParametersInfoW(20, 0, image_path, 3)
+    def set_theme(self,):
+        print(self.tab)
+        colors = []
+        for id, cirlce in enumerate(self.circles):
+            if id < len(self.gradient_points):
+                colors.append((cirlce['rgb'][0],cirlce['rgb'][1],cirlce['rgb'][2],1))
+        self.arc_api.set_space_theme_color(self.tab,"blendedGradient",colors,"light",intensityFactor=0.7)
 
-class image_button:
-    def __init__(self,button_frame,img_path,command_function,size=(20,20)):
+
+
+class ImageButton:
+    def __init__(self, button_frame, img_path, command_function, size=(20,20)):
+        self.button_frame = button_frame
         self.button_display_img = Image.open(img_path)
-        self.button_display_img = self.button_display_img.resize(size, Image.ANTIALIAS)
+        self.button_display_img = self.button_display_img.resize(size, Image.LANCZOS)
         self.button_imgtk = ImageTk.PhotoImage(self.button_display_img)
-        self.button = tk.Button(button_frame, image=self.button_imgtk, borderwidth=0,command=command_function)
+        self.button = tk.Button(button_frame, image=self.button_imgtk,borderwidth=0, command=command_function)
+        self.button.image = self.button_imgtk  # Keep a reference to the image
+        self.button.config(image=self.button_imgtk, highlightthickness=0, pady=0, padx=0)
+    def pack(self, **kwargs):
+        self.button.pack(**kwargs)
 
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.geometry("350x450")
-    root.iconbitmap('resources\icon.ico')
-    root.title('Arc Palette')
+def add_tab(arc_api):
 
+    global tab_count
     canvas_h = 320
     canvas_w = 320
-    color_pick_frame = tk.Frame(root)
+    
+    tab = ttk.Frame(notebook)
+    notebook.add(tab, text=f"space {tab_count + 1}")
+    
+    # Add some content to the new tab
+    color_pick_frame = tk.Frame(tab)
     color_pick_frame.pack(side="top")
-    color_pick = color_picker(color_pick_frame,(canvas_w,canvas_h))
-
-    button_frame = tk.Frame(root)
+    color_pick = color_picker(color_pick_frame, (canvas_w, canvas_h), arc_api, tab=tab_count)
+    button_frame = tk.Frame(tab)
     button_frame.pack(side="top")
-    label = tk.Label(button_frame,text="asdffsafd")
-    minus_button = image_button(button_frame,"resources\minus_button.png",color_pick.remove_color)
-    plus_button = image_button(button_frame,"resources\plus_button.png",color_pick.add_color)
-    minus_button.button.pack(side="left",padx=5)
-    plus_button.button.pack(side="right",padx=5)
+    minus_button = ImageButton(button_frame, r"resources\minus_button.png", color_pick.remove_color)
+    minus_button.pack(pady=10,padx=5,side="left")
+    
+    theme_button = ImageButton(button_frame, r"resources/wallpaper_set.png", color_pick.set_theme)
+    theme_button.pack(pady=10,padx=5,side="left",)
+    plus_button = ImageButton(button_frame, r"resources\plus_button.png", color_pick.add_color)
+    plus_button.pack(pady=10,padx=5,side="right")
+    tab_count += 1
 
-    button = image_button(button_frame,"resources\wallpaper_set.png",color_pick.create_smooth_radial_gradient_thread)
-    button.button.pack(side="left",padx=5)
+"""def update_spaces_count():
+    global tab_count, spaces_num, notebook
+    arc_api = arc_API()
+    new_spaces_num = arc_api.get_number_of_spaces()
+    print(spaces_num,new_spaces_num)
+    if new_spaces_num > spaces_num:
+        for i in range(new_spaces_num - spaces_num):
+            add_tab(arc_api)
+    if new_spaces_num < spaces_num:
+        print("NEED TO DELEAST")
+
+
+    spaces_num = new_spaces_num
+    
+    root.after(100, update_spaces_count)"""
+
+if __name__ == "__main__":
+    global tab_count, spaces_num, notebook
+    tab_count = 0
+    root = tk.Tk()
+    arc_api = arc_API()
+    spaces_num = arc_api.get_number_of_spaces()
+    
+    root.iconbitmap('resources\icon.ico')
+    root.title('Arc Palette')
+    notebook = ttk.Notebook(root)
+    notebook.pack(fill='both', expand=True)
+    for i in range(spaces_num):
+        add_tab(arc_api)
+    
+    #update_spaces_count()
     root.mainloop()

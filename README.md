@@ -46,7 +46,7 @@ This is version of the installation for more advanced users who know what they a
 
     ```
     pip install -r requirements.txt
-    pip install -r Arc_API/requirements.txt
+    pip install -r Arc_API/requirements-arc-api.txt
     ```
 
 ## Usage

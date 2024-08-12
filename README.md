@@ -39,12 +39,9 @@ This is version of the installation for more advanced users who know what they a
     ```
  Clone the Arc_API repository:
    ```
-    pip install -r requirements.txt
-    pip install -r Arc_API\requirements.txt
-   ```
-    ```
     git clone https://github.com/neurokitti/Arc_API.git
-    ```
+   ```
+
 3. Install the required packages from `requirements.txt` and `requirements-arc-api`:
 
     ```

@@ -224,7 +224,7 @@ if __name__ == "__main__":
     notebook.pack(fill='both', expand=True)
     for i in range(spaces_num):
         add_tab(arc_api)
-    check_box = ttk.Checkbutton(root, text="Auto Restart Arc",var=var)
+    check_box = tk.Checkbutton(root, text="Auto Restart Arc",var=var)
     check_box.pack()
     #update_spaces_count()
     sv_ttk.set_theme("light")

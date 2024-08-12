@@ -25,8 +25,8 @@ This is version of the installation for more advanced users who know what they a
 1. Clone the GitHub repository:
 
     ```
-    git clone https://github.com/neurokitti/arc_gradient.git
-    cd arc_gradient
+    git clone https://github.com/neurokitti/Arc_Palette.git
+    cd Arc_Palette
     ```
 
 2. Create a virtual environment:

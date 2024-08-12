@@ -8,7 +8,7 @@ https://github.com/user-attachments/assets/63bdb73e-7459-4170-a98f-2b29670de21b
 
 
 
-**IMPORTANT: arc must be closed for changes to take effect. so close arc, apply the theme then reopen arc**
+**IMPORTANT: Arc must be closed for changes to take effect. so close arc, apply the theme then reopen arc**
 ## Installation
 
 In order to install Arc Palette, simply follow these steps:
@@ -47,7 +47,7 @@ This is version of the installation for more advanced users who know what they a
    git clone https://github.com/neurokitti/Arc_API.git
    ```
 
-3. Install the required packages from `requirements.txt` and `requirements-arc-api`:
+3. Install the required packages from `requirements.txt` and `requirements-arc-api.txt`:
 
     ```
     pip install -r requirements.txt

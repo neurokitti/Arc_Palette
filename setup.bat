@@ -1,16 +1,13 @@
 @echo off
-
-git clone https://github.com/neurokitti/arc_gradient.git
-
-cd arc_gradient
-
-python -m venv myenv
-
-call myenv\Scripts\activate
-
+echo Cloning Arc_API...
+git clone https://github.com/neurokitti/Arc_API.git
+echo creating venv... 
+python -m venv .venv
+echo activating venv... 
+call .venv\Scripts\activate
+echo installing requirments... 
 pip install -r requirements.txt
-
-python main.py
+pip install -r Arc_API\requirements-arc-api.txt
 
 echo.
 echo Installation complete! 

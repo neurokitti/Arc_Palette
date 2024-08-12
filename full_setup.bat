@@ -15,5 +15,5 @@ pip install -r Arc_API\requirements-arc-api.txt
 echo.
 echo Installation complete! 
 echo.
-
+run.bat
 pause

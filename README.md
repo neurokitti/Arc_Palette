@@ -49,10 +49,6 @@ This is version of the installation for more advanced users who know what they a
     pip install -r Arc_API\requirements.txt
     ```
 
-**Note:** For the best experience, make sure your Windows wallpaper settings are set to "Stretch," Arc is set to "Mica," and the theme is set to "Transparent."
-
-![Arc Gradient Settings](https://github.com/user-attachments/assets/0a4e5dfa-b175-4b3e-b760-b2367121e7d1)
-
 ## Usage
 
 You can run the program by either executing the **run.bat** file or using Python in the terminal:
@@ -60,7 +56,3 @@ You can run the program by either executing the **run.bat** file or using Python
 ```bash
 python main.py
 ```
-
-## Important Information
-
-This program achieves its effects by changing your Windows wallpaper. However, you can still maintain your wallpaper using either Wallpaper Engine or the free and open-source alternative, [Lively Wallpaper](https://github.com/rocksdanister/lively).

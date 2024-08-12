@@ -31,7 +31,7 @@ This is version of the installation for more advanced users who know what they a
 
 2. Create a virtual environment:
 
-    ```bash
+    ```
     python -m venv .venv
     .venv\Scripts\activate  # On Windows
     # or

@@ -33,15 +33,20 @@ This is version of the installation for more advanced users who know what they a
 
     ```bash
     python -m venv myenv
-    myenv\Scripts\activate  # On Windows
+    .venv\Scripts\activate  # On Windows
     # or
-    source myenv/bin/activate  # On macOS/Linux
+    source .venv/bin/activate  # On macOS/Linux
     ```
+ Clone the Arc_API repository:
 
-3. Install the required packages from `requirements.txt`:
+    ```bash
+    git clone https://github.com/neurokitti/Arc_API.git
+    ```
+3. Install the required packages from `requirements.txt` and `requirements-arc-api`:
 
     ```bash
     pip install -r requirements.txt
+    pip install -r Arc_API\requirements.txt
     ```
 
 **Note:** For the best experience, make sure your Windows wallpaper settings are set to "Stretch," Arc is set to "Mica," and the theme is set to "Transparent."

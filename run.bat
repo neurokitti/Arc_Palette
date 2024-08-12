@@ -1,6 +1,6 @@
 @echo off
 REM Activating the virtual environment (optional step)
-call myenv\Scripts\activate
+call .venv\Scripts\activate
 
 REM Running the Python script
 python main.py

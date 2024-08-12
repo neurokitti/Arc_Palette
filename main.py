@@ -183,11 +183,15 @@ class color_picker:
     def set_theme(self,):
         print(self.tab)
         colors = []
+        if var.get() == 1:
+            arc_api.close_arc()
+            arc_api.kill_arc()
         for id, cirlce in enumerate(self.circles):
             if id < len(self.gradient_points):
                 colors.append((cirlce['rgb'][0],cirlce['rgb'][1],cirlce['rgb'][2],1))
         self.arc_api.set_space_theme_color(self.tab,"blendedGradient",colors,"light",intensityFactor=0.7)
-
+        if var.get() == 1:
+            arc_api.open_arc()
 
 
 class ImageButton:
@@ -248,13 +252,14 @@ if __name__ == "__main__":
     root = tk.Tk()
     arc_api = arc_API()
     spaces_num = arc_api.get_number_of_spaces()
-    
+    var = tk.IntVar()
     root.iconbitmap('resources\icon.ico')
     root.title('Arc Palette')
     notebook = ttk.Notebook(root)
     notebook.pack(fill='both', expand=True)
     for i in range(spaces_num):
         add_tab(arc_api)
-    
+    check_box = tk.Checkbutton(text="auto restart Arc",var=var)
+    check_box.pack()
     #update_spaces_count()
     root.mainloop()

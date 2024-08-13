@@ -123,3 +123,11 @@ NOTE: Mac users, if you want to distribute the app file, you'll want to enclose 
 - https://stackoverflow.com/a/37537259
 
 Github note: Uploading releases with executables that have spaces in their name automatically get replaced with periods e.g. `Arc Palette.exe` -> `Arc.Palette.exe`
+
+### Credits:
+
+* **Henson Liga** - *Lead Developer and Creator* - [neurokitti](https://github.com/neurokitti)
+
+* **Valkryx** - *Frontend Developer* - [valk_ryx](https://github.com/valk-ryx)
+
+* **MidoriBoi** - *Hobbyist Developer* - [Andrew-J-Larson](https://github.com/Andrew-J-Larson)

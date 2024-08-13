@@ -11,6 +11,16 @@ import random
 from tkinter import ttk
 from Arc_API.Arc_API import arc_API
 import customtkinter as ctk
+
+def resource_path(relative_path):
+    """ Fixes issues with PyInstaller """
+    try:
+        # PyInstaller creates a temp folder, path found in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 class color_picker:
     def __init__(self,canvas_frame, size,arc_api, max_colors=10, tab=0):
         self.tab = tab
@@ -22,7 +32,7 @@ class color_picker:
         self.circles = []
         self.img = self.generate_color_picker_canvas()
         
-        display_img = Image.open("resources/img/dot_pad.png") # add an arg later
+        display_img = Image.open(resource_path("resources/img/dot_pad.png")) # add an arg later
         self.display_img = display_img.resize((self.width, self.height))
         self.display_img_tk = ImageTk.PhotoImage(self.display_img)
         self.canvas.create_image(2, 2, image=self.display_img_tk, anchor='nw')
@@ -202,26 +212,26 @@ def add_tab(arc_api):
     button_frame.pack(side="top")
     button_frame2 = ttk.Frame(button_frame,)
     button_frame2.pack(side="left")
-    minus_button = ImageButton(button_frame2, r"resources/img/minus_button.png", color_pick.remove_color)
+    minus_button = ImageButton(button_frame2, resource_path("resources/img/minus_button.png"), color_pick.remove_color)
     minus_button.pack(pady=5,padx=5,side="left")
     slider_frame = ttk.Frame(button_frame,)
     slider_frame.pack(side="right")
-    theme_button = ImageButton(button_frame2, r"resources/img/set_theme_button.png", color_pick.set_theme)
+    theme_button = ImageButton(button_frame2, resource_path("resources/img/set_theme_button.png"), color_pick.set_theme)
     theme_button.pack(pady=5,padx=5,side="left",)
-    plus_button = ImageButton(button_frame2, r"resources/img/plus_button.png", color_pick.add_color)
+    plus_button = ImageButton(button_frame2, resource_path("resources/img/plus_button.png"), color_pick.add_color)
     plus_button.pack(pady=5,padx=5,side="left")
 
 
     slider_alpha_frame = ttk.Frame(button_frame,)
     slider_alpha_frame.pack(side="top")
-    alpha_label = ttk.Label(slider_alpha_frame,text="alpha")
+    alpha_label = ttk.Label(slider_alpha_frame,text="Opacity")
     alpha_label.pack(pady=5,padx=5,side="left")
     slider = ctk.CTkSlider(master=slider_alpha_frame, from_=0, to=100, command=slider_set_alpha)
     slider.pack(pady=5,padx=5,side="right")
 
     slider_transparency_frame = ttk.Frame(button_frame,)
     slider_transparency_frame.pack(side="bottom")
-    transparency_label = ttk.Label(slider_transparency_frame,text="transparency")
+    transparency_label = ttk.Label(slider_transparency_frame,text="Intensity")
     transparency_label.pack(pady=5,padx=5,side="left")
     slider2 = ctk.CTkSlider(master=slider_transparency_frame, from_=0, to=100, command=slider_set_intensity)
     slider2.pack(pady=5,padx=5,side="right")
@@ -253,14 +263,14 @@ if __name__ == "__main__":
     arc_api = arc_API()
     spaces_num = arc_api.get_number_of_spaces()
     var = tk.IntVar()
-    root.iconbitmap('resources/img/icon.ico')
+    root.iconbitmap(resource_path("resources/img/icon.ico"))
     root.title('Arc Palette')
     root.geometry("340x450")
     notebook = ttk.Notebook(root)
     notebook.pack(fill='both', expand=True)
     for i in range(spaces_num):
         add_tab(arc_api)
-    check_box = tk.Checkbutton(root, text="Auto Restart Arc",var=var)
+    check_box = ttk.Checkbutton(root, text="Auto Restart Arc",var=var)
     check_box.pack()
     #update_spaces_count()
     sv_ttk.set_theme("light")

@@ -11,7 +11,7 @@ https://github.com/user-attachments/assets/4941f813-58a0-442c-8528-5540b479c1af
 
 
 
-**IMPORTANT: arc must be closed for changes to take effect. so close arc, apply the theme then reopen arc**
+**IMPORTANT: Arc must be closed for changes to take effect. So, either use auto restart or close Arc, apply the theme then reopen Arc**
 ## Installation
 
 In order to install Arc Palette, simply follow these steps:

@@ -19,7 +19,7 @@ In order to install Arc Palette, simply follow these steps:
 ### Simple Installation (recommended)
 This is the easy version of the installation for users that are not experienced with applications such as Command Prompt or Powershell.
 
-Check the [Releases](https://github.com/neurokitti/Arc_Palette/releases) tab and find your repective executable:
+Check the [Releases](https://github.com/neurokitti/Arc_Palette/releases) tab and find your respective executable:
 - Windows: `Arc Palette.exe`
 - Mac: `Arc Palette.dmg` (contains the `Arc Palette.app` executable)
 - Linux: *(not supported at this time)*

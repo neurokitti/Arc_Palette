@@ -6,24 +6,17 @@ cd "${0:A:h}"
 # Go to repo's root directory where everything is setup
 cd ../..
 
-echo "Downloading Arc_API..."
-curl -L https://github.com/neurokitti/Arc_API/archive/refs/heads/main.zip -o Arc_API.zip
-echo "Unzipping Arc_API..."
-tar -xf Arc_API.zip
-mv Arc_API-main Arc_API
-echo "Deleting Arc_API ZIP file..."
-rm Arc_API.zip
-
-echo "Creating venv..."
+echo "Cloning Arc_API..."
+git clone https://github.com/neurokitti/Arc_API.git
+echo "creating venv..."
 python3 -m venv .venv
-echo "Activating venv..."
+echo "activating venv..."
 source .venv/bin/activate
-
-echo "Installing requirements..."
+echo "installing requirements..."
 pip3 install -r requirements.txt
 pip3 install -r Arc_API/requirements-arc-api.txt
 
-echo ""
+echo ''
 echo "Installation complete!"
 
 

@@ -43,7 +43,7 @@ This is version of the installation for more advanced users who know what they a
     ```bat
 	:: Windows only
 	python -m venv .venv
-    .venv\Scripts\activate
+    call .venv\Scripts\activate
     ```
 	
 	```sh

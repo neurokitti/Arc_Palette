@@ -22,7 +22,7 @@ class color_picker:
         self.circles = []
         self.img = self.generate_color_picker_canvas()
         
-        display_img = Image.open("resources\dot_pad.png") # add an arg later
+        display_img = Image.open("resources/img/dot_pad.png") # add an arg later
         self.display_img = display_img.resize((self.width, self.height))
         self.display_img_tk = ImageTk.PhotoImage(self.display_img)
         self.canvas.create_image(2, 2, image=self.display_img_tk, anchor='nw')
@@ -185,12 +185,12 @@ def add_tab(arc_api):
     color_pick = color_picker(color_pick_frame, (canvas_w, canvas_h), arc_api, tab=tab_count)
     button_frame = ttk.Frame(tab,)
     button_frame.pack(side="top")
-    minus_button = ImageButton(button_frame, r"resources\minus_button.png", color_pick.remove_color)
+    minus_button = ImageButton(button_frame, r"resources/img/minus_button.png", color_pick.remove_color)
     minus_button.pack(pady=5,padx=5,side="left")
     
-    theme_button = ImageButton(button_frame, r"resources/wallpaper_set.png", color_pick.set_theme)
+    theme_button = ImageButton(button_frame, r"resources/img/set_theme_button.png", color_pick.set_theme)
     theme_button.pack(pady=5,padx=5,side="left",)
-    plus_button = ImageButton(button_frame, r"resources\plus_button.png", color_pick.add_color)
+    plus_button = ImageButton(button_frame, r"resources/img/plus_button.png", color_pick.add_color)
     plus_button.pack(pady=5,padx=5,side="right")
     tab_count += 1
 
@@ -217,7 +217,7 @@ if __name__ == "__main__":
     arc_api = arc_API()
     spaces_num = arc_api.get_number_of_spaces()
     var = tk.IntVar()
-    root.iconbitmap('resources\icon.ico')
+    root.iconbitmap('resources/img/icon.ico')
     root.title('Arc Palette')
     root.geometry("340x450")
     notebook = ttk.Notebook(root)

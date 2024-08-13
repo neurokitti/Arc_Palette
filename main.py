@@ -10,7 +10,7 @@ from threading import Thread
 import random
 from tkinter import ttk
 from Arc_API.Arc_API import arc_API
-
+import customtkinter as ctk
 class color_picker:
     def __init__(self,canvas_frame, size,arc_api, max_colors=10, tab=0):
         self.tab = tab
@@ -41,6 +41,9 @@ class color_picker:
         gradient_width = 400
         self.gradient_size = (gradient_width,gradient_heigth)
         self.gradient_points = [(0,0),(0,gradient_heigth),(gradient_width,gradient_heigth//2),(0,gradient_heigth//2),(gradient_width//2,gradient_heigth//2)]
+        self.mode = "light"
+        self.alpha = 0.7
+        self.intensity =1
     def on_canvas_click(self,event):
         x = min(max(event.x, 0), self.width)
         y = min(max(event.y, 0), self.height)
@@ -146,16 +149,24 @@ class color_picker:
             arc_api.kill_arc()
         for id, cirlce in enumerate(self.circles):
             if id < len(self.gradient_points):
-                colors.append((cirlce['rgb'][0],cirlce['rgb'][1],cirlce['rgb'][2],1))
+                colors.append((cirlce['rgb'][0],cirlce['rgb'][1],cirlce['rgb'][2],self.alpha))
         print(len(colors))
         if len(colors) < 2:
             print("single color")
             print(colors)
-            self.arc_api.set_space_theme_color(self.tab,"blendedSingleColor",colors,"dark",intensityFactor=1)
+            self.arc_api.set_space_theme_color(self.tab,"blendedSingleColor",colors,self.mode,intensityFactor=self.intensity)
         else:
-            self.arc_api.set_space_theme_color(self.tab,"blendedGradient",colors,"light",intensityFactor=1)
+            self.arc_api.set_space_theme_color(self.tab,"blendedGradient",colors,self.mode,intensityFactor=self.intensity)
         if var.get() == 1:
             arc_api.open_arc()
+    def set_mode(self,mode):
+        self.mode = mode
+    def set_alpha(self,alpha):
+        self.alpha = float(alpha/100)
+        print(float(alpha/100))
+    def set_intensity(self,intensity):
+        self.intensity = float(intensity/100)
+        print(float(intensity/100))
 
 
 class ImageButton:
@@ -171,27 +182,52 @@ class ImageButton:
         self.button.pack(**kwargs)
 
 def add_tab(arc_api):
-
+    def slider_set_alpha(value):
+        color_pick.set_alpha(value)
+    def slider_set_intensity(value):
+        color_pick.set_intensity(value)
     global tab_count
     canvas_h = 320
     canvas_w = 320
     
     tab = ttk.Frame(notebook)
     notebook.add(tab, text=f"Space {tab_count + 1}")
-    
+
+
     # Add some content to the new tab
     color_pick_frame = tk.Frame(tab,)
     color_pick_frame.pack(side="top")
     color_pick = color_picker(color_pick_frame, (canvas_w, canvas_h), arc_api, tab=tab_count)
     button_frame = ttk.Frame(tab,)
     button_frame.pack(side="top")
-    minus_button = ImageButton(button_frame, r"resources/img/minus_button.png", color_pick.remove_color)
+    button_frame2 = ttk.Frame(button_frame,)
+    button_frame2.pack(side="left")
+    minus_button = ImageButton(button_frame2, r"resources/img/minus_button.png", color_pick.remove_color)
     minus_button.pack(pady=5,padx=5,side="left")
-    
-    theme_button = ImageButton(button_frame, r"resources/img/set_theme_button.png", color_pick.set_theme)
+    slider_frame = ttk.Frame(button_frame,)
+    slider_frame.pack(side="right")
+    theme_button = ImageButton(button_frame2, r"resources/img/set_theme_button.png", color_pick.set_theme)
     theme_button.pack(pady=5,padx=5,side="left",)
-    plus_button = ImageButton(button_frame, r"resources/img/plus_button.png", color_pick.add_color)
-    plus_button.pack(pady=5,padx=5,side="right")
+    plus_button = ImageButton(button_frame2, r"resources/img/plus_button.png", color_pick.add_color)
+    plus_button.pack(pady=5,padx=5,side="left")
+
+
+    slider_alpha_frame = ttk.Frame(button_frame,)
+    slider_alpha_frame.pack(side="top")
+    alpha_label = ttk.Label(slider_alpha_frame,text="alpha")
+    alpha_label.pack(pady=5,padx=5,side="left")
+    slider = ctk.CTkSlider(master=slider_alpha_frame, from_=0, to=100, command=slider_set_alpha)
+    slider.pack(pady=5,padx=5,side="right")
+
+    slider_transparency_frame = ttk.Frame(button_frame,)
+    slider_transparency_frame.pack(side="bottom")
+    transparency_label = ttk.Label(slider_transparency_frame,text="transparency")
+    transparency_label.pack(pady=5,padx=5,side="left")
+    slider2 = ctk.CTkSlider(master=slider_transparency_frame, from_=0, to=100, command=slider_set_intensity)
+    slider2.pack(pady=5,padx=5,side="right")
+
+
+    
     tab_count += 1
 
 """def update_spaces_count():

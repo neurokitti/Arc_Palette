@@ -119,4 +119,5 @@ After it completes, if successful, there should be a `dist` folder created with 
 - Windows: `dist\Arc Palette.exe`
 - Mac: `dist/Arc Palette.app` (there is also a unix based version of the executable `Arc Palette`, but can be ignored)
 
-NOTE: Mac users, if you want to distribute the app file, you'll want to encase it in a DMG file, similar to how it's done in: https://stackoverflow.com/a/37310294
+NOTE: Mac users, if you want to distribute the app file, you'll want to encase it in a DMG file, similar to how it's done in:
+- https://stackoverflow.com/a/37537259

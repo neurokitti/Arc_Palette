@@ -16,17 +16,29 @@ https://github.com/user-attachments/assets/4941f813-58a0-442c-8528-5540b479c1af
 
 In order to install Arc Palette, simply follow these steps:
 
-### Simple Installation
+### Simple Installation (recommended)
 This is the easy version of the installation for users that are not experienced with applications such as Command Prompt or Powershell.
 
-Check the [Releases](https://github.com/neurokitti/Arc_Palette/releases) tab, and find your respective installer script:
-- Windows: `WINDOWS_arc_palette_full_setup.bat`
-- Mac: `MAC_arc_palette_full_setup.command`
+Check the [Releases](https://github.com/neurokitti/Arc_Palette/releases) tab and find your repective executable:
+- Windows: `Arc Palette.exe`
+- Mac: `Arc Palette.app`
+- Linux: *(not supported at this time)*
+
+Place the executable where you want (this does not have to be in the arc folder).
+
+Then, just run the executable (double click on it).
+
+### Script Installation (not recommended)
+While this still works for now, it's not recommended now that proper executables are built for each release.
+
+Location of installer scripts:
+- Windows: `.\resources\Windows\FULL_SETUP_arc_palette.bat`
+- Mac: `./resources/Mac/FULL_SETUP_arc_palette.command`
 - Linux: (not supported at this time)
 
 Place the script file where you want to install arc palette (this does not have to be in the arc folder).
 
-Then, just run the file (double click on it).
+Then, just run the script file (double click on it).
 
 ### Advanced Installation
 This is version of the installation for more advanced users who know what they are doing when it comes to applications such as Command Prompt and Powershell.
@@ -74,7 +86,7 @@ This is version of the installation for more advanced users who know what they a
 
 You can run the program by either executing the `run_arc_palette` script file or using Python in the terminal.
 
-Location of script:
+Location of scripts:
 - Windows: `.\resources\Windows\run_arc_palette.bat`
 - Mac: `./resources/Mac/run_arc_palette.command`
 

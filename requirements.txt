@@ -3,3 +3,4 @@ ttkbootstrap==1.10.1
 sv_ttk==2.6.0
 customtkinter==5.2.2
 pyinstaller>=6.10.0
+pywinstyles==1.8

@@ -21,7 +21,7 @@ This is the easy version of the installation for users that are not experienced 
 
 Check the [Releases](https://github.com/neurokitti/Arc_Palette/releases) tab and find your repective executable:
 - Windows: `Arc Palette.exe`
-- Mac: `Arc Palette.app`
+- Mac: `Arc Palette.dmg` (contains the `Arc Palette.app` executable)
 - Linux: *(not supported at this time)*
 
 Place the executable where you want (this does not have to be in the arc folder).
@@ -119,5 +119,5 @@ After it completes, if successful, there should be a `dist` folder created with 
 - Windows: `dist\Arc Palette.exe`
 - Mac: `dist/Arc Palette.app` (there is also a unix based version of the executable `Arc Palette`, but can be ignored)
 
-NOTE: Mac users, if you want to distribute the app file, you'll want to encase it in a DMG file, similar to how it's done in:
+NOTE: Mac users, if you want to distribute the app file, you'll want to enclose it inside a `.DMG` file, similar to how it's done here:
 - https://stackoverflow.com/a/37537259

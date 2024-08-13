@@ -47,7 +47,7 @@ This is version of the installation for more advanced users who know what they a
     ```
 	
 	```sh
-	# Mac/Linux only
+	# Mac only
 	python3 -m venv .venv
     source .venv/bin/activate
     ```
@@ -65,7 +65,7 @@ This is version of the installation for more advanced users who know what they a
 	```
 	
 	```sh
-	# Mac/Linux only
+	# Mac only
     pip3 install -r requirements.txt
     pip3 install -r Arc_API/requirements-arc-api.txt
     ```
@@ -76,7 +76,7 @@ You can run the program by either executing the `run_arc_palette` script file or
 
 Location of script:
 - Windows: `.\resources\Windows\run_arc_palette.bat`
-- Mac/Linux: `./resources/Mac/run_arc_palette.command`
+- Mac: `./resources/Mac/run_arc_palette.command`
 
 Using Python in the terminal:
 
@@ -87,7 +87,7 @@ Using Python in the terminal:
 	```
 
 	```sh
-	# Mac/Linux only
+	# Mac only
 	source .venv/bin/activate
 	python3 main.py
 	```

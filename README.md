@@ -20,7 +20,7 @@ This is version of the installation for more advanced users who know what they a
     ```
 2. Create a virtual environment:
     ```
-    python3 -m venv .venv
+    python -m venv .venv
     .venv\Scripts\activate  # On Windows
     # or
     source .venv/bin/activate  # On macOS/Linux

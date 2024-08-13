@@ -1,9 +1,9 @@
 @echo off
 
-:: Check if Python is installed
-powershell.exe -c "$(python -V) -like 'Python 3.*'"
+:: Check if Python 3 is installed
+powershell.exe -c "if ($(python -V) -like 'Python 3.*') { return $true } else { throw $false }" >nul 2>&1
 IF ERRORLEVEL 1 (
-    echo Python is not installed. Please install Python 3.6 or higher and try again.
+    echo Python 3 is not installed. Please install Python 3.6 or higher and try again.
     pause
     exit /b
 )

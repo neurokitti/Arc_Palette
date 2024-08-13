@@ -1,5 +1,0 @@
-.DS_STORE
-.venv
-build
-dist
-*.spec

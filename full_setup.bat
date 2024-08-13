@@ -1,7 +1,7 @@
 @echo off
 
 :: Check if Python is installed
-python --version >nul 2>&1
+powershell.exe -c "$(python -V) -like 'Python 3.*'"
 IF ERRORLEVEL 1 (
     echo Python is not installed. Please install Python 3.6 or higher and try again.
     pause
@@ -34,11 +34,14 @@ echo Activating venv...
 call .venv\Scripts\activate
 
 echo Installing requirements... 
-pip install -r requirements.txt
-pip install -r Arc_API\requirements-arc-api.txt
+Pip3 install -r requirements.txt
+Pip3 install -r Arc_API\requirements-arc-api.txt
 
 echo.
 echo Installation complete! 
 echo.
 run.bat
 pause
+
+
+

@@ -4,7 +4,9 @@ Arc Palette is a community-developed application that applies gradient effects s
 
 
 
-https://github.com/user-attachments/assets/63bdb73e-7459-4170-a98f-2b29670de21b
+
+https://github.com/user-attachments/assets/4941f813-58a0-442c-8528-5540b479c1af
+
 
 
 

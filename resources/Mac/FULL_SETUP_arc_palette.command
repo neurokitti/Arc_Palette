@@ -28,6 +28,8 @@ mv Arc_API-main Arc_API
 echo "Deleting Arc_API ZIP file..."
 rm Arc_API.zip
 
+chmod +x ./resources/Mac/run_arc_palette.command
+
 echo "Creating venv..."
 python3 -m venv .venv
 echo "Activating venv..."

@@ -19,7 +19,11 @@ In order to install Arc Palette, simply follow these steps:
 ### Simple Installation
 This is the easy version of the installation for users that are not experienced with applications such as Command Prompt or Powershell.
 
-download [arc_palette.bat](url)
+download [arc_palette.bat](https://github.com/neurokitti/Arc_Palette/releases/download/v1.2/arc_palette.bat)
+
+place the arc_palette.bat file wher you want to install arc palette (this does not have to be in the arc folder)
+
+then just run the file (double click on it)
 
 ### Advanced Installation
 This is version of the installation for more advanced users who know what they are doing when it comes to applications such as Command Prompt and Powershell.

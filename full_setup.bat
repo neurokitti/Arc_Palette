@@ -15,7 +15,7 @@ tar -xf Arc_Palette.zip
 rename Arc_Palette-main Arc_Palette
 echo Deleting Arc Palette ZIP file...
 del Arc_Palette.zip
-rd /s /q Arc_Palette-main
+
 
 cd Arc_Palette
 
@@ -26,7 +26,6 @@ tar -xf Arc_API.zip
 rename Arc_API-main Arc_API
 echo Deleting Arc_API ZIP file...
 del Arc_API.zip
-rd /s /q Arc_API-main
 
 echo Creating venv... 
 python -m venv .venv

@@ -19,13 +19,7 @@ In order to install Arc Palette, simply follow these steps:
 ### Simple Installation
 This is the easy version of the installation for users that are not experienced with applications such as Command Prompt or Powershell.
 
-1. Download the file in this repo named "full_setup.bat"
-
-2. Open the "full_setup.bat" file in the folder you want the application in (if it gives a warning, simply click "More info" and "Run anyway)
-
-3. After running the batch file, you should have a window open with the Arc Palette application, you are now ready to go!
-
-OR
+download [arc_palette.bat](url)
 
 ### Advanced Installation
 This is version of the installation for more advanced users who know what they are doing when it comes to applications such as Command Prompt and Powershell.

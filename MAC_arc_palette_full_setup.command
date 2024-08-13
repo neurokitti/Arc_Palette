@@ -38,7 +38,7 @@ pip3 install -r requirements.txt
 pip3 install -r Arc_API/requirements-arc-api.txt
 
 echo ""
-echo "Installation complete!"
+echo "Requirements installation complete!"
 echo ""
-./resources/Mac/run_arc_palette.command
+chmod +x ./resources/Mac/run_arc_palette.command && ./resources/Mac/run_arc_palette.command
 read -s -k '?Press any key to continue . . .'

@@ -1,9 +1,12 @@
 @echo off
 
-:: Check if Python 3 is installed
+REM .bat files change directory, need to open to directory where script launched from
+cd "%~dp0"
+
+REM Check if Python 3 is installed
 powershell.exe -c "if ($(python -V) -like 'Python 3.*') { return $true } else { throw $false }" >nul 2>&1
 IF ERRORLEVEL 1 (
-    echo Python 3 is not installed. Please install Python 3.6 or higher and try again.
+    echo Python 3 is not installed. Please install Python 3.8 or higher and try again.  PYTHON DOWNLOAD: https://www.python.org/downloads/release/python-3125/
     pause
     exit /b
 )
@@ -16,7 +19,6 @@ rename Arc_Palette-main Arc_Palette
 echo Deleting Arc Palette ZIP file...
 del Arc_Palette.zip
 
-
 cd Arc_Palette
 
 echo Downloading Arc_API...
@@ -27,20 +29,17 @@ rename Arc_API-main Arc_API
 echo Deleting Arc_API ZIP file...
 del Arc_API.zip
 
-echo Creating venv... 
+echo Creating venv...
 python -m venv .venv
-echo Activating venv... 
+echo Activating venv...
 call .venv\Scripts\activate
 
-echo Installing requirements... 
-Pip3 install -r requirements.txt
-Pip3 install -r Arc_API\requirements-arc-api.txt
+echo Installing requirements...
+pip install -r requirements.txt
+pip install -r Arc_API\requirements-arc-api.txt
 
 echo.
-echo Installation complete! 
+echo Installation complete!
 echo.
-run.bat
+.\resources\Windows\run_arc_palette.bat
 pause
-
-
-

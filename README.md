@@ -128,6 +128,8 @@ Github note: Uploading releases with executables that have spaces in their name 
 
 * **Henson Liga** - *Lead Developer and Creator* - [neurokitti](https://github.com/neurokitti)
 
+* **ash.meow** - *Backend Developer (JSON Support)* - [No GitHub Profile]
+
 * **Valkryx** - *Frontend Developer* - [valk_ryx](https://github.com/valk-ryx)
 
 * **MidoriBoi** - *Hobbyist Developer* - [Andrew-J-Larson](https://github.com/Andrew-J-Larson)

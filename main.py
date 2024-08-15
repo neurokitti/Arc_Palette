@@ -314,7 +314,7 @@ class Arc_Palette(tk.Tk):
         check_box_frame = ttk.Frame(self,)
         check_box_frame.pack(side="bottom", fill='both', expand=True)
 
-        notebook = tab_bar(self, 3, space_tab, self.arc_api, self.window_color_mode)
+        notebook = tab_bar(self, self.spaces_num, space_tab, self.arc_api, self.window_color_mode)
         notebook.pack(fill='both', expand=True)
         pywinstyles.set_opacity(notebook, value=0.7)
 

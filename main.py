@@ -13,6 +13,10 @@ from Arc_API.Arc_API import arc_API
 import customtkinter as ctk
 import pywinstyles
 import utils
+import hot_fixes.ctk_scale_error as hot_fix_ctk_scale_error
+
+# Patch libraries with bugs first!
+CTkScalingBaseClass = hot_fix_ctk_scale_error.CTkScalingBaseClass
 
 class color_picker(tk.Canvas):
     def __init__(self, parent, image_path,size,arc_api, max_colors=10, tab=0, *args, **kwargs):

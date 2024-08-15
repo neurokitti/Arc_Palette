@@ -9,8 +9,7 @@ import os
 from threading import Thread
 import random
 from tkinter import ttk
-from Arc_API.Arc_API import arc_API
-import customtkinter as ctk
+from Arc_API.Arc_API import arc_API 
 import pywinstyles
 import utils
 

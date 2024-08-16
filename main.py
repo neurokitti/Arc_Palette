@@ -258,7 +258,8 @@ class space_tab(ttk.Frame):
         color_pick_frame = ttk.Frame(color_pick_tab_frame, background=None,borderwidth=5, relief="solid")
         color_pick_frame.pack(side="top")
         # Pass canvas_h and canvas_w to color_picker
-        color_pick = color_picker(color_pick_frame, f"resources/img/{self.window_color_mode}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
+        themeModeFolderName = (self.window_color_mode).lower()
+        color_pick = color_picker(color_pick_frame, f"resources/img/{themeModeFolderName}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
         color_pick.pack()
         pywinstyles.set_opacity(color_pick_tab_frame, value=1)
 
@@ -267,13 +268,13 @@ class space_tab(ttk.Frame):
         button_frame.pack(side="top")
         button_frame2 = ttk.Frame(button_frame,)
         button_frame2.pack(side="left")
-        minus_button = ImageButton(button_frame2, f"resources/img/{self.window_color_mode}/minus_button.png", color_pick.remove_color)
+        minus_button = ImageButton(button_frame2, f"resources/img/{themeModeFolderName}/minus_button.png", color_pick.remove_color)
         minus_button.pack(pady=5,padx=5,side="left")
         slider_frame = ttk.Frame(button_frame,)
         slider_frame.pack(side="right")
-        theme_button = ImageButton(button_frame2, f"resources/img/{self.window_color_mode}/set_theme.png", color_pick.set_theme)
+        theme_button = ImageButton(button_frame2, f"resources/img/{themeModeFolderName}/set_theme.png", color_pick.set_theme)
         theme_button.pack(pady=5,padx=5,side="left",)
-        plus_button = ImageButton(button_frame2, f"resources/img/{self.window_color_mode}/plus_button.png", color_pick.add_color)
+        plus_button = ImageButton(button_frame2, f"resources/img/{themeModeFolderName}/plus_button.png", color_pick.add_color)
         plus_button.pack(pady=5,padx=5,side="left")
 
         slider_alpha_frame = ttk.Frame(button_frame,)
@@ -329,7 +330,7 @@ class Arc_Palette(tk.Tk):
 
     def apply_window_color_mode(self):
         # Sets theme based off of system light/dark
-        if theme == "light":
+        if theme == "Light":
             sv_ttk.set_theme("light")
             pywinstyles.apply_style(self, "acrylic")
         else:

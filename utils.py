@@ -15,14 +15,13 @@ import pywinstyles
 
 def resource_path(relative_path):
     """ Fixes issues with PyInstaller """
-    try:
+    base_path = os.path.abspath(".")
+    if '_MEIPASS2' in os.environ:
         # PyInstaller creates a temp folder, path found in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+        base_path = os.environ['_MEIPASS2']
     return os.path.join(base_path, relative_path)
 
-def path_to_img(image_path,size):
+def path_to_img(image_path, size):
     width, height = size
     image = Image.open(resource_path(image_path))
     display_img = image.resize((width, height))

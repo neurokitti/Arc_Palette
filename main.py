@@ -215,7 +215,7 @@ class TransparentCanvas(tk.Canvas):
 class ImageButton:
     def __init__(self, button_frame, img_path, command_function, size=(20,20)):
         self.button_frame = button_frame
-        self.button_display_img = Image.open(resource_path(img_path))
+        self.button_display_img = Image.open(utils.resource_path(img_path))
         self.button_display_img = self.button_display_img.resize(size, Image.LANCZOS)
         self.button_imgtk = ImageTk.PhotoImage(self.button_display_img)
         self.button = ttk.Button(button_frame, image=self.button_imgtk, command=command_function)
@@ -340,5 +340,5 @@ class Arc_Palette(tk.Tk):
 if __name__ == "__main__":
     theme = darkdetect.theme()
     arc_palette = Arc_Palette(theme)
-    arc_palette.iconbitmap(resource_path("resources/img/icon.ico"))
+    arc_palette.iconbitmap(utils.resource_path("resources/img/icon.ico"))
     arc_palette.mainloop()

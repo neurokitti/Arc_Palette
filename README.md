@@ -73,14 +73,14 @@ NOTE: Mac users, if you don't already have git installed, you will be prompted t
 3. Install the required packages from `requirements.txt` and `requirements-arc-api`:
 
     ```bat
-	:: Windows only
+    :: Windows only
     pip install -r requirements.txt
     pip install -r requirements-win.txt
     pip install -r Arc_API\requirements-arc-api.txt
-	```
+    ```
 
-	```sh
-	# Mac only
+    ```sh
+    # Mac only
     pip3 install -r requirements.txt
     pip3 install -r requirements-mac.txt
     pip3 install -r Arc_API/requirements-arc-api.txt
@@ -96,17 +96,17 @@ Location of scripts:
 
 Using Python in the terminal:
 
-	```bat
-	REM Windows only
-	call .venv\Scripts\activate
-    python main.py
-	```
+```bat
+REM Windows only
+call .venv\Scripts\activate
+python main.py
+```
 
-	```sh
-	# Mac only
-	source .venv/bin/activate
-	python3 main.py
-	```
+```sh
+# Mac only
+source .venv/bin/activate
+python3 main.py
+```
 
 ### Advanced Build executables
 If you wish to compile the executables yourself, there are scripts with the pyinstaller command already setup.

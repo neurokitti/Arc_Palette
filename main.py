@@ -201,7 +201,7 @@ class TransparentCanvas(tk.Canvas):
         super().__init__(parent, *args, **kwargs)
         
         # Load the image with transparency
-        self.image = Image.open(image_path)
+        self.image = Image.open(utils.resource_path(image_path))
         self.image_with_transparency = ImageTk.PhotoImage(self.image)
         
         # Set the canvas size to the image size
@@ -329,7 +329,7 @@ class Arc_Palette(tk.Tk):
 
     def apply_window_color_mode(self):
         # Sets theme based off of system light/dark
-        if theme == "Light":
+        if theme == "light":
             sv_ttk.set_theme("light")
             pywinstyles.apply_style(self, "acrylic")
         else:

@@ -2,10 +2,7 @@
 .venv
 __pycache__
 *.exe
-build
-dist
+/build
+/dist
 *.app
-*.onefile-build
-*.build
-*.dist
 *.spec

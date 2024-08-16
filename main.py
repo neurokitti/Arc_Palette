@@ -49,7 +49,7 @@ class color_picker(tk.Canvas):
         self.alpha = 0.7
         self.intensity = 1
 
-        self.image_path=image_path
+        self.image_path = image_path
         self.img = self.generate_color_picker_canvas()
         self.dot_grid_image = utils.path_to_img(self.image_path, (self.width, self.height))
         self.create_image(0, 0, anchor=tk.NW, image=self.dot_grid_image)
@@ -215,7 +215,7 @@ class TransparentCanvas(tk.Canvas):
 class ImageButton:
     def __init__(self, button_frame, img_path, command_function, size=(20,20)):
         self.button_frame = button_frame
-        self.button_display_img = Image.open(img_path)
+        self.button_display_img = Image.open(resource_path(img_path))
         self.button_display_img = self.button_display_img.resize(size, Image.LANCZOS)
         self.button_imgtk = ImageTk.PhotoImage(self.button_display_img)
         self.button = ttk.Button(button_frame, image=self.button_imgtk, command=command_function)
@@ -223,14 +223,6 @@ class ImageButton:
         self.button.config(image=self.button_imgtk,)
     def pack(self, **kwargs):
         self.button.pack(**kwargs)
-def resource_path(relative_path):
-    """ Fixes issues with PyInstaller """
-    try:
-        # PyInstaller creates a temp folder, path found in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
 
 
 class tab_bar(ttk.Notebook):
@@ -266,7 +258,7 @@ class space_tab(ttk.Frame):
         color_pick_frame = ttk.Frame(color_pick_tab_frame, background=None,borderwidth=5, relief="solid")
         color_pick_frame.pack(side="top")
         # Pass canvas_h and canvas_w to color_picker
-        color_pick = color_picker(color_pick_frame, resource_path(f"resources/img/{self.window_color_mode}/dot_pad.png"), (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
+        color_pick = color_picker(color_pick_frame, f"resources/img/{self.window_color_mode}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
         color_pick.pack()
         pywinstyles.set_opacity(color_pick_tab_frame, value=1)
 
@@ -275,13 +267,13 @@ class space_tab(ttk.Frame):
         button_frame.pack(side="top")
         button_frame2 = ttk.Frame(button_frame,)
         button_frame2.pack(side="left")
-        minus_button = ImageButton(button_frame2, resource_path(f"resources/img/{self.window_color_mode}/minus_button.png"), color_pick.remove_color)
+        minus_button = ImageButton(button_frame2, f"resources/img/{self.window_color_mode}/minus_button.png", color_pick.remove_color)
         minus_button.pack(pady=5,padx=5,side="left")
         slider_frame = ttk.Frame(button_frame,)
         slider_frame.pack(side="right")
-        theme_button = ImageButton(button_frame2, resource_path(f"resources/img/{self.window_color_mode}/set_theme.png"), color_pick.set_theme)
+        theme_button = ImageButton(button_frame2, f"resources/img/{self.window_color_mode}/set_theme.png", color_pick.set_theme)
         theme_button.pack(pady=5,padx=5,side="left",)
-        plus_button = ImageButton(button_frame2, resource_path(f"resources/img/{self.window_color_mode}/plus_button.png"), color_pick.add_color)
+        plus_button = ImageButton(button_frame2, f"resources/img/{self.window_color_mode}/plus_button.png", color_pick.add_color)
         plus_button.pack(pady=5,padx=5,side="left")
 
         slider_alpha_frame = ttk.Frame(button_frame,)

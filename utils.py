@@ -13,9 +13,18 @@ from Arc_API.Arc_API import arc_API
 import customtkinter as ctk
 import pywinstyles
 
+def resource_path(relative_path):
+    """ Fixes issues with PyInstaller """
+    try:
+        # PyInstaller creates a temp folder, path found in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
 def path_to_img(image_path,size):
     width, height = size
-    image = Image.open(image_path)
+    image = Image.open(resource_path(image_path))
     display_img = image.resize((width, height))
     tk_image = ImageTk.PhotoImage(display_img)
     return tk_image

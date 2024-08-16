@@ -6,15 +6,20 @@ import sv_ttk
 import math
 from PIL import Image, ImageTk, ImageDraw
 import os
+import sys
 from threading import Thread
 import random
 from tkinter import ttk
 from Arc_API.Arc_API import arc_API
 import customtkinter as ctk
-import pywinstyles
-import utils
 import darkdetect
+import utils
 import hot_fixes.ctk_scale_error as hot_fix_ctk_scale_error
+# needed below for mac support
+try:
+    import pywinstyles
+except ImportError:
+    pass
 
 # Patch libraries with bugs first!
 CTkScalingBaseClass = hot_fix_ctk_scale_error.CTkScalingBaseClass

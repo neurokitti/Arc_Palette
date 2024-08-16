@@ -13,6 +13,7 @@ from Arc_API.Arc_API import arc_API
 import customtkinter as ctk
 import pywinstyles
 import utils
+import darkdetect
 import hot_fixes.ctk_scale_error as hot_fix_ctk_scale_error
 
 # Patch libraries with bugs first!
@@ -327,7 +328,7 @@ class Arc_Palette(tk.Tk):
                                     variable=self.auto_restart_var,
                                     command=self.set_auto_restart_arc)
         check_box.pack()
-        pywinstyles.set_opacity(check_box_frame, value=0.8)
+        pywinstyles.set_opacity(check_box_frame, value=0.7)
         self.apply_window_color_mode()
 
     def set_auto_restart_arc(self):
@@ -335,18 +336,17 @@ class Arc_Palette(tk.Tk):
         self.arc_api.set_auto_restart_arc(self.auto_restart_var.get())
 
     def apply_window_color_mode(self):
-        if self.window_color_mode == "light":
+        # Sets theme based off of system light/dark
+        if theme == "Light":
             sv_ttk.set_theme("light")
-            pywinstyles.change_header_color(self, color="#FFFFFF")
             pywinstyles.apply_style(self, "acrylic")
         else:
             sv_ttk.set_theme("dark")
-            pywinstyles.change_header_color(self, color="#000000")
             pywinstyles.apply_style(self, "acrylic")
 
 
 if __name__ == "__main__":
-    arc_palette = Arc_Palette("light")
+    theme = darkdetect.theme()
+    arc_palette = Arc_Palette(theme)
+    arc_palette.iconbitmap(resource_path("resources/img/icon.ico"))
     arc_palette.mainloop()
-
-

@@ -1,31 +1,27 @@
-import ttkbootstrap as tb
-from ttkbootstrap import Style
-from ttkbootstrap.widgets import Meter
-import tkinter as tk
-import sv_ttk
-import math
+# Built-in libraries
+import os, sys
+# Standard GUI and image related libraries
 from PIL import Image, ImageTk, ImageDraw
-import os
-import sys
-from threading import Thread
-import random
-from tkinter import ttk
-from Arc_API.Arc_API import arc_API
-import customtkinter as ctk
-# needed below for mac support
-try:
-    import pywinstyles
-except ImportError:
-    pass
 
+
+# Fixes issues with compiling into binaries
 def resource_path(relative_path):
-    """ Fixes issues with PyInstaller """
-    try:
-        # PyInstaller creates a temp folder, path found in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
+    isWindows = os.name == "nt"
+    # using different compilers for Windows/Mac
+    if isWindows:
+        # fix for nuitka (try the temp path first, before assuming absolute path)
+        base_path = os.path.join(os.path.dirname(__file__), relative_path)
+        if os.path.isfile(base_path):
+            return base_path
+        else:
+            return os.path.join(os.path.abspath("."), relative_path)
+    else:
+        # fix for pyinstaller (creates a temp folder, path found in _MEIPASS)
+        try:
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+        return os.path.join(base_path, relative_path)
 
 def path_to_img(image_path, size):
     width, height = size

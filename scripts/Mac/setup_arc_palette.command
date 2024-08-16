@@ -21,7 +21,10 @@ source .venv/bin/activate
 
 echo "Installing requirements..."
 pip3 install -r requirements.txt
+pip3 install -r requirements-mac.txt
 pip3 install -r Arc_API/requirements-arc-api.txt
+
+deactivate
 
 echo ""
 echo "Installation complete!"

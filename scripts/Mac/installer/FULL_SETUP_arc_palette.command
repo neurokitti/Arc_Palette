@@ -28,7 +28,7 @@ mv Arc_API-main Arc_API
 echo "Deleting Arc_API ZIP file..."
 rm Arc_API.zip
 
-chmod +x ./resources/Mac/run_arc_palette.command
+chmod +x ./scripts/Mac/run_arc_palette.command
 
 echo "Creating venv..."
 python3 -m venv .venv
@@ -37,10 +37,11 @@ source .venv/bin/activate
 
 echo "Installing requirements..."
 pip3 install -r requirements.txt
+pip3 install -r requirements-mac.txt
 pip3 install -r Arc_API/requirements-arc-api.txt
 
 echo ""
 echo "Installation complete!"
 echo ""
-./resources/Mac/run_arc_palette.command
+./scripts/Mac/run_arc_palette.command
 read -s -k '?Press any key to continue . . .'

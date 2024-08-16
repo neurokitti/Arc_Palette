@@ -2,7 +2,6 @@
 .venv
 __pycache__
 *.exe
-binaries
 build
 dist
 *.app

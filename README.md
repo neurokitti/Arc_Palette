@@ -2,7 +2,7 @@
 
 # Arc Palette
 
-Arc Palette is a community-developed application that applies gradient effects similar to the ones seen on the macOS version of Arc on Windows
+Arc Palette is a community-developed application that applies advanced gradient effects to spaces in the Arc browser.
 
 
 
@@ -19,9 +19,9 @@ In order to install Arc Palette, simply follow these steps:
 ### Simple Installation (recommended)
 This is the easy version of the installation for users that are not experienced with applications such as Command Prompt or Powershell.
 
-Check the [Releases](https://github.com/neurokitti/Arc_Palette/releases) tab and find your respective executable:
-- Windows: `Arc.Palette.exe`
-- Mac: `Arc.Palette.dmg` (contains the `Arc Palette.app` executable)
+Check the [Releases](https://github.com/neurokitti/Arc_Palette/releases) tab and find your respective executable (where `ARCH` is the architecture of your machine):
+- Windows: `Arc_Palette-ARCH.exe`
+- Mac: `Arc_Palette-ARCH.dmg` (contains the `Arc Palette.app` executable)
 - Linux: *(not supported at this time)*
 
 Place the executable where you want (this does not have to be in the arc folder).
@@ -32,8 +32,8 @@ Then, just run the executable (double click on it).
 While this still works for now, it's not recommended now that proper executables are built for each release.
 
 Location of installer scripts:
-- Windows: `.\resources\Windows\FULL_SETUP_arc_palette.bat`
-- Mac: `./resources/Mac/FULL_SETUP_arc_palette.command` (note, if you want to run this script in the terminal, run `chmod +x` on the script first)
+- Windows: `.\scripts\Win\installer\FULL_SETUP_arc_palette.bat`
+- Mac: `./scripts/Mac/installer/FULL_SETUP_arc_palette.command` (note, if you want to run this script in the terminal, run `chmod +x` on the script first)
 - Linux: *(not supported at this time)*
 
 Place the script file where you want to install arc palette (this does not have to be in the arc folder).
@@ -59,7 +59,7 @@ NOTE: Mac users, if you don't already have git installed, you will be prompted t
 	python -m venv .venv
     call .venv\Scripts\activate
     ```
-	
+
 	```sh
 	# Mac only
 	python3 -m venv .venv
@@ -75,12 +75,14 @@ NOTE: Mac users, if you don't already have git installed, you will be prompted t
     ```bat
 	:: Windows only
     pip install -r requirements.txt
+    pip install -r requirements-win.txt
     pip install -r Arc_API\requirements-arc-api.txt
 	```
-	
+
 	```sh
 	# Mac only
     pip3 install -r requirements.txt
+    pip3 install -r requirements-mac.txt
     pip3 install -r Arc_API/requirements-arc-api.txt
     ```
 
@@ -89,14 +91,14 @@ NOTE: Mac users, if you don't already have git installed, you will be prompted t
 You can run the program by either executing the `run_arc_palette` script file or using Python in the terminal.
 
 Location of scripts:
-- Windows: `.\resources\Windows\run_arc_palette.bat`
-- Mac: `./resources/Mac/run_arc_palette.command` (note, if you want to run this script in the terminal, run `chmod +x` on the script first)
+- Windows: `.\scripts\Win\run_arc_palette.bat`
+- Mac: `./scripts/Mac/run_arc_palette.command` (note, if you want to run this script in the terminal, run `chmod +x` on the script first)
 
 Using Python in the terminal:
 
 	```bat
 	REM Windows only
-	.venv\Scripts\activate 
+	call .venv\Scripts\activate
     python main.py
 	```
 
@@ -112,17 +114,16 @@ If you wish to compile the executables yourself, there are scripts with the pyin
 However, you must make sure that you've already done a full setup, either from **Script Installation** or from **Advanced Installation**.
 
 Then, run the respective script file for building the executable:
-- Windows: `BUILD_WINDOWS_arc_palette_EXE.bat`
-- Mac: `BUILD_MAC_arc_palette_APP.command` (note, if you want to run this script in the terminal, run `chmod +x` on the script first)
+- Windows: `scripts\Win\build\BUILD_BINARY_WINDOWS.ps1`
+ - note, if you want to run this script in the terminal, run:
+   `powershell.exe -ExecutionPolicy Bypass -File .\scripts\Win\build\BUILD_BINARY_WINDOWS.ps1`
+- Mac: `scripts/Mac/build/BUILD_BINARY_MAC.command`
+ - note, if you want to run this script in the terminal, run:
+   `chmod +x scripts/Mac/build/BUILD_BINARY_MAC.command; ./scripts/Mac/build/BUILD_BINARY_MAC.command`
 
-After it completes, if successful, there should be a `dist` folder created with the executable inside:
-- Windows: `dist\Arc Palette.exe`
-- Mac: `dist/Arc Palette.app` (there is also a unix based version of the executable `Arc Palette`, but can be ignored)
-
-NOTE: Mac users, if you want to distribute the app file, you'll want to enclose it inside a `.DMG` file, similar to how it's done here:
-- https://stackoverflow.com/a/37537259
-
-Github note: Uploading releases with executables that have spaces in their name automatically get replaced with periods e.g. `Arc Palette.exe` -> `Arc.Palette.exe`
+After it completes, if successful, there should be a `dist` folder created with the executable inside (where `ARCH` is the architecture of your machine):
+- Windows: `dist\Arc_Palette-ARCH.exe`
+- Mac: `dist/Arc_Palette-ARCH.dmg` (contains the `Arc Palette.app` executable)
 
 ### Credits:
 
@@ -132,4 +133,4 @@ Github note: Uploading releases with executables that have spaces in their name 
 
 * **Valkryx** - *Frontend Developer* - [valk_ryx](https://github.com/valk-ryx)
 
-* **MidoriBoi** - *Hobbyist Developer* - [Andrew-J-Larson](https://github.com/Andrew-J-Larson)
+* **Andrew Larson** - *Hobbyist Developer* - [Andrew-J-Larson](https://github.com/Andrew-J-Larson)

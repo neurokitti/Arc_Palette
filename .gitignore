@@ -1,5 +1,11 @@
 .DS_STORE
 .venv
+__pycache__
+*.exe
 build
 dist
+*.app
+*.onefile-build
+*.build
+*.dist
 *.spec

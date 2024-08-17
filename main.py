@@ -2,33 +2,28 @@
 import os, sys, math, random
 from threading import Thread
 from typing import Union
-# Standard GUI and image related libraries
+# General system related libraries
 import darkdetect
+# General image related libraries
+from PIL import Image, ImageTk, ImageDraw
+# General GUI related libraries
+import tkinter as tk
+from tkinter import ttk
 import ttkbootstrap as tb
 from ttkbootstrap import Style
 from ttkbootstrap.widgets import Meter
-import tkinter as tk
-from tkinter import ttk
 import sv_ttk
-from PIL import Image, ImageTk, ImageDraw
-import customtkinter as ctk
-from customtkinter.windows.widgets.scaling import CTkScalingBaseClass
-# Conditional GUI libraries (based on OS)
+# Conditional GUI related libraries (based on OS)
 try:
     # Windows only
     import pywinstyles
-except ImportError:
-#    import PyQt # may need for mac... #### TODO
+except ImportError: # MacOS can only have non-blurry transparency at this time
     pass
-# Additional from local PY files
+# Additional libraries from local PY files
 from Arc_API.Arc_API import arc_API
 import utils
-# These local files are only patches, meant to be temporary until upstream library gets fixed
-import hot_fixes.ctk_scale_error as hot_fix_ctk_scale_error
 
 
-# Patch libraries with bugs first!
-CTkScalingBaseClass = hot_fix_ctk_scale_error.CTkScalingBaseClass
 
 
 class color_picker(tk.Canvas):
@@ -55,6 +50,10 @@ class color_picker(tk.Canvas):
         # Circle Info
         self.circles = []
         self.current_circle = None
+        self.circle_outline_color = "grey11" if theme == "dark" else "grey98"
+                                   # colors above match transparency of background
+                                   # colors below are ideal when not using transparency
+                                   #"black" if theme == "dark" else "white"
 
         # Default Settings
         self.mode = "light"
@@ -85,12 +84,12 @@ class color_picker(tk.Canvas):
 
         return (x, y, rgb)
 
-    def spawn_circle(self, pos, rgb, size, border_size, outline_color="white"):
+    def spawn_circle(self, pos, rgb, size, border_size):
         x, y = pos
         circle_id = self.create_oval(
             x - size, y - size,
             x + size, y + size,
-            fill=self.rgb_to_hex(rgb), outline=outline_color, width=border_size)
+            fill=self.rgb_to_hex(rgb), outline=self.circle_outline_color, width=border_size)
         return circle_id
 
     def update_circle_data(self, x, y, rgb):
@@ -179,8 +178,8 @@ class color_picker(tk.Canvas):
         if self.arc_api.auto_restart_arc == True:
             self.arc_api.close_arc()
             self.arc_api.kill_arc()
-        for id, cirlce in enumerate(self.circles):
-            colors.append((cirlce["rgb"][0], cirlce["rgb"][1], cirlce["rgb"][2], self.alpha))
+        for id, circle in enumerate(self.circles):
+            colors.append((circle["rgb"][0], circle["rgb"][1], circle["rgb"][2], self.alpha))
         print(len(colors))
         if len(colors) < 2:
             print("single color")
@@ -192,8 +191,8 @@ class color_picker(tk.Canvas):
             self.arc_api.open_arc()
 
     def set_alpha(self, alpha):
-        self.alpha = float(alpha/100)
-        print(float(alpha/100))
+        self.alpha = float(alpha / 100)
+        print(float(alpha / 100))
 
     def set_intensity(self, intensity):
         self.intensity = float(intensity / 100)
@@ -245,7 +244,10 @@ class tab_bar(ttk.Notebook):
 
         for i in range(tabs):
             tab_instance = tab_class(self, self.arc_api)
-            self.add(tab_instance, text=f"Tab {i+1}")
+            space_name = self.arc_api.get_space_name(i)
+            if not space_name:
+                space_name = f"Space {i+1}"
+            self.add(tab_instance, text=space_name)
 
 
 
@@ -269,27 +271,26 @@ class space_tab(ttk.Frame):
         color_pick_frame = ttk.Frame(color_pick_tab_frame, background=None, borderwidth=5, relief="solid")
         color_pick_frame.pack(side="top")
         # Pass canvas_h and canvas_w to color_picker
-        themeModeFolderName = (self.window_color_mode).lower()
-        color_pick = color_picker(color_pick_frame, f"res/img/{themeModeFolderName}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
+        color_pick = color_picker(color_pick_frame, f"res/img/{self.window_color_mode}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
         color_pick.pack()
 
         colorPickTabFrameAlphaValue = 1
-        if 'pywinstyles' in sys.modules:
+        if utils.is_windows():
             pywinstyles.set_opacity(color_pick_tab_frame, value=colorPickTabFrameAlphaValue)
-        #else: #### TODO
+        #else:
             #color_pick_tab_frame.attributes('-alpha', colorPickTabFrameAlphaValue)
 
         button_frame = ttk.Frame(color_pick_tab_frame)
         button_frame.pack(side="top")
         button_frame2 = ttk.Frame(button_frame)
         button_frame2.pack(side="left")
-        minus_button = ImageButton(button_frame2, f"res/img/{themeModeFolderName}/minus_button.png", color_pick.remove_color)
+        minus_button = ImageButton(button_frame2, f"res/img/{self.window_color_mode}/minus_button.png", color_pick.remove_color)
         minus_button.pack(pady=5, padx=5, side="left")
         slider_frame = ttk.Frame(button_frame)
         slider_frame.pack(side="right")
-        theme_button = ImageButton(button_frame2, f"res/img/{themeModeFolderName}/set_theme.png", color_pick.set_theme)
+        theme_button = ImageButton(button_frame2, f"res/img/{self.window_color_mode}/set_theme.png", color_pick.set_theme)
         theme_button.pack(pady=5, padx=5, side="left")
-        plus_button = ImageButton(button_frame2, f"res/img/{themeModeFolderName}/plus_button.png", color_pick.add_color)
+        plus_button = ImageButton(button_frame2, f"res/img/{self.window_color_mode}/plus_button.png", color_pick.add_color)
         plus_button.pack(pady=5, padx=5, side="left")
 
         slider_alpha_frame = ttk.Frame(button_frame)
@@ -317,7 +318,11 @@ class Arc_Palette(tk.Tk):
         self.window_color_mode = window_color_mode
         self.iconbitmap(utils.resource_path("res/img/icon.ico"))
         self.title("Arc Palette")
-        self.geometry("360x520")
+
+        # setting x dimensions any lower will result in canvas being cut off
+        # reason it is an odd number is due to canvas: size, padding, and borderwidth
+        self.geometry("367x520")
+        self.minsize(367, 520)
 
         self.arc_api = arc_API()
         self.spaces_num = self.arc_api.get_number_of_spaces()
@@ -333,9 +338,9 @@ class Arc_Palette(tk.Tk):
         notebook.pack(fill="both", expand=True)
 
         notebookAlphaValue = 0.7
-        if 'pywinstyles' in sys.modules:
+        if utils.is_windows():
             pywinstyles.set_opacity(notebook, value=notebookAlphaValue)
-        #else: #### TODO
+        #else:
             #notebook.attributes('-alpha', notebookAlphaValue)
 
         # Checkbox for Auto Restart Arc
@@ -345,36 +350,29 @@ class Arc_Palette(tk.Tk):
         check_box.pack()
 
         checkBoxFrameAlphaValue = 0.7
-        if 'pywinstyles' in sys.modules:
+        if utils.is_windows():
             pywinstyles.set_opacity(check_box_frame, value=checkBoxFrameAlphaValue)
-        #else: #### TODO
+        #else:
             #check_box_frame.attributes('-alpha', checkBoxFrameAlphaValue)
 
-        self.apply_window_color_mode()
+        self.apply_window_theme()
 
     def set_auto_restart_arc(self):
         # Update the auto_restart_arc attribute in arc_api
         self.arc_api.set_auto_restart_arc(self.auto_restart_var.get())
 
-    def apply_window_color_mode(self):
-        # Sets theme based off of system light/dark
-        if theme == "Light":
-            sv_ttk.set_theme("light")
-            if 'pywinstyles' in sys.modules:
-                pywinstyles.apply_style(self, "acrylic")
-            #else: #### TODO
-                # there is nothing that can be done for Mac?
-        else:
-            sv_ttk.set_theme("dark")
-            if 'pywinstyles' in sys.modules:
-                pywinstyles.apply_style(self, "acrylic")
-            #else: #### TODO
-                # there is nothing that can be done for Mac?
+    def apply_window_theme(self):
+        # set light/dark theme and give window transparency blur effects
+        sv_ttk.set_theme(theme)
+        if utils.is_windows():
+            pywinstyles.apply_style(self, "acrylic")
+        #else:
+            #self.attributes('-alpha', 0.9)
 
 
 
 
 if __name__ == "__main__":
-    theme = darkdetect.theme()
+    theme = (darkdetect.theme()).lower() # darkdetect doesn't use lowercase
     arc_palette = Arc_Palette(theme)
     arc_palette.mainloop()

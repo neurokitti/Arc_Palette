@@ -55,7 +55,10 @@ class color_picker(tk.Canvas):
         # Circle Info
         self.circles = []
         self.current_circle = None
-        self.circle_outline_color = "black" if theme == "dark" else "white"
+        self.circle_outline_color = "grey11" if theme == "dark" else "grey98"
+                                  # colors above match transparency of background
+                                  # colors below are ideal when not transparent
+                                  # "black" if theme == "dark" else "white"
 
         # Default Settings
         self.mode = "light"

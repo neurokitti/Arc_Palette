@@ -316,7 +316,7 @@ class Arc_Palette(tk.Tk):
     def __init__(self, window_color_mode):
         super().__init__()
         self.window_color_mode = window_color_mode
-        self.iconbitmap(utils.resource_path("res/img/icon.ico"))
+        self.iconbitmap(utils.resource_path("res/img/icon.ico" if is_windows() else "res/img/icon.icns"))
         self.title("Arc Palette")
 
         # setting x dimensions any lower will result in canvas being cut off

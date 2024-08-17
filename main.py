@@ -277,8 +277,7 @@ class space_tab(ttk.Frame):
         colorPickTabFrameAlphaValue = 1
         if utils.is_windows():
             pywinstyles.set_opacity(color_pick_tab_frame, value=colorPickTabFrameAlphaValue)
-        else:
-            pass
+        #else:
             #color_pick_tab_frame.attributes('-alpha', colorPickTabFrameAlphaValue)
 
         button_frame = ttk.Frame(color_pick_tab_frame)
@@ -341,8 +340,7 @@ class Arc_Palette(tk.Tk):
         notebookAlphaValue = 0.7
         if utils.is_windows():
             pywinstyles.set_opacity(notebook, value=notebookAlphaValue)
-        else:
-            pass
+        #else:
             #notebook.attributes('-alpha', notebookAlphaValue)
 
         # Checkbox for Auto Restart Arc
@@ -354,8 +352,7 @@ class Arc_Palette(tk.Tk):
         checkBoxFrameAlphaValue = 0.7
         if utils.is_windows():
             pywinstyles.set_opacity(check_box_frame, value=checkBoxFrameAlphaValue)
-        else:
-            pass
+        #else:
             #check_box_frame.attributes('-alpha', checkBoxFrameAlphaValue)
 
         self.apply_window_theme()
@@ -369,8 +366,7 @@ class Arc_Palette(tk.Tk):
         sv_ttk.set_theme(theme)
         if utils.is_windows():
             pywinstyles.apply_style(self, "acrylic")
-        else:
-            pass
+        #else:
             #self.attributes('-alpha', 0.9)
 
 

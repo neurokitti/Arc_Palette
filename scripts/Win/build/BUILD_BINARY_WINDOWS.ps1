@@ -38,7 +38,6 @@ $binaryName = "$($NAME.replace(' ', '_'))-${osArch}"
 # pyinstaller main.py --onefile --clean --noconfirm \
 #   --windowed \
 #   --collect-all sv_ttk \
-#   --add-data="hot_fixes/*;hot_fixes/" \
 #   --add-data="utils.py;." \
 #  --add-data="${IMGLIGHTPATH}/*;${IMGLIGHTPATH}/" \
 #  --add-data="${IMGDARKPATH}/*;${IMGDARKPATH}/" \

@@ -2,17 +2,19 @@
 import os, sys, math, random
 from threading import Thread
 from typing import Union
-# Standard GUI and image related libraries
+# General system related libraries
 import darkdetect
+# General image related libraries
+from PIL import Image, ImageTk, ImageDraw
+# General GUI related libraries
+import tkinter as tk
+from tkinter import ttk
 import ttkbootstrap as tb
 from ttkbootstrap import Style
 from ttkbootstrap.widgets import Meter
-import tkinter as tk
-from tkinter import ttk
-import sv_ttk
-from PIL import Image, ImageTk, ImageDraw
 #import customtkinter as ctk
-from customtkinter.windows.widgets.scaling import CTkScalingBaseClass
+#from customtkinter.windows.widgets.scaling import CTkScalingBaseClass
+import sv_ttk
 # Conditional GUI libraries (based on OS)
 try:
     # Windows only

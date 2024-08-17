@@ -1,6 +1,6 @@
 # Built-in libraries
 import os, sys
-# Standard GUI and image related libraries
+# General image related libraries
 from PIL import Image, ImageTk, ImageDraw
 
 

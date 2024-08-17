@@ -1,2 +1,3 @@
-pywinstyles==1.8
 nuitka>=2.4.5
+pywinstyles==1.8
+

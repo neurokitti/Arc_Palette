@@ -17,7 +17,7 @@ VERSION="2.0"
 IMGPATH="res/img"
 IMGLIGHTPATH="${IMGPATH}/light"
 IMGDARKPATH="${IMGPATH}/dark"
-ICONPATH="${IMGPATH}/icon.ico"
+ICONPATH="${IMGPATH}/icon.icns"
 
 # recommended not to change
 binariesFolderPath="dist"

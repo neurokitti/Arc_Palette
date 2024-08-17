@@ -1,14 +1,16 @@
 # Built-in libraries
-import os, sys
-# Standard GUI and image related libraries
+import os, sys, platform
+# General image related libraries
 from PIL import Image, ImageTk, ImageDraw
 
+# for cross-platform compatibility
+def is_windows():
+    return platform.system() == "Windows"
 
 # Fixes issues with compiling into binaries
 def resource_path(relative_path):
-    isWindows = os.name == "nt"
     # using different compilers for Windows/Mac
-    if isWindows:
+    if is_windows():
         # fix for nuitka (try the temp path first, before assuming absolute path)
         base_path = os.path.join(os.path.dirname(__file__), relative_path)
         if os.path.isfile(base_path):

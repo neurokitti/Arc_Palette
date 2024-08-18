@@ -382,7 +382,7 @@ class Arc_Palette(tk.Tk):
 
 if __name__ == "__main__":
     theme = (darkdetect.theme()).lower()
-    arc_palette = Arc_Palette()
+    arc_palette = Arc_Palette(theme)
     # TODO: many aspects of the UI needs ways to update configuration when system theme changes while
     #       app is in use, and some basic boilerplate code is in place, which changes the majority of
     #       the theme, except:

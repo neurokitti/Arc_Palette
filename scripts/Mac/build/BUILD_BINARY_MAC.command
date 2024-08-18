@@ -13,7 +13,7 @@ source .venv/bin/activate
 # change details here
 NAME="Arc Palette"
 DESCRIPTION="Arc Palette is a community-developed application that applies advanced gradient effects to spaces in the Arc browser."
-VERSION="0.2.1"
+VERSION="0.2.3"
 IMGPATH="res/img"
 IMGLIGHTPATH="${IMGPATH}/light"
 IMGDARKPATH="${IMGPATH}/dark"
@@ -35,25 +35,50 @@ binaryName="${NAME// /_}-${osArch}"
 
 # Nuitka BROKEN: See https://doc.qt.io/qtforpython-6/deployment/deployment-nuitka.html#nuitka-issue-on-macos
 
-# Note: This will auto download/cache the required compiler and linker for Nuitka if one or both are not available on the computer
-#nuitka main.py --macos-create-app-bundle --remove-output --assume-yes-for-downloads --follow-imports \
-#  --enable-plugin=tk-inter \
-#  --macos-app-icon="${ICONPATH}" \
-#  --include-data-files="${ICONPATH}=${ICONPATH}" \
-#  --include-data-dir="${IMGLIGHTPATH}=${IMGLIGHTPATH}" \
-#  --include-data-dir="${IMGDARKPATH}=${IMGDARKPATH}" \
-#  --file-version="${VERSION}" --product-version="${VERSION}" --macos-app-version="${VERSION}" \
-#  --file-description="${DESCRIPTION}" \
-#  --product-name="${NAME}" --macos-app-name="${NAME}" \
-#  --output-filename="${NAME}" \
-#  --output-dir="${binariesFolderPath}"
-# package the .APP into a .DMG
-#mkdir "${binariesFolderPath}/${binaryName}"
-#mv "${binariesFolderPath}/${NAME}.app" "${binariesFolderPath}/${binaryName}/${NAME}.app"
-#hdiutil create -srcfolder "${binariesFolderPath}/${binaryName}" "${binariesFolderPath}/${binaryName}.dmg"
-#rm -rf "${binariesFolderPath}/${binaryName}"
+# # Note: This will auto download/cache the required compiler and linker for Nuitka if one or both are not available on the computer
+# nuitka main.py --macos-create-app-bundle --remove-output --assume-yes-for-downloads --follow-imports \
+#   --enable-plugin=tk-inter \
+#   --macos-app-icon="${ICONPATH}" \
+#   --include-data-files="${ICONPATH}=${ICONPATH}" \
+#   --include-data-dir="${IMGLIGHTPATH}=${IMGLIGHTPATH}" \
+#   --include-data-dir="${IMGDARKPATH}=${IMGDARKPATH}" \
+#   --file-version="${VERSION}" --product-version="${VERSION}" --macos-app-version="${VERSION}" \
+#   --file-description="${DESCRIPTION}" \
+#   --product-name="${NAME}" --macos-app-name="${NAME}" \
+#   --output-filename="${NAME}" \
+#   --output-dir="${binariesFolderPath}"
+# # package the .APP into a .DMG
+# mkdir "${binariesFolderPath}/${binaryName}"
+# mv "${binariesFolderPath}/${NAME}.app" "${binariesFolderPath}/${binaryName}/${NAME}.app"
+# hdiutil create -srcfolder "${binariesFolderPath}/${binaryName}" "${binariesFolderPath}/${binaryName}.dmg"
+# rm -rf "${binariesFolderPath}/${binaryName}"
 
-# Have to keep using pyinstaller for the interim, which has less options... #### TODO Might need to do more --collect-all ...
+# Have to keep using pyinstaller for the interim
+
+# create temp files
+pyinstallerVersionYAML="metadata.yml"
+cat > "${pyinstallerVersionYAML}" <<- EOM
+Version: ${VERSION}
+CompanyName: 
+FileDescription: ${DESCRIPTION}
+InternalName: ${NAME}
+LegalCopyright: 
+OriginalFilename: ${NAME}.app
+ProductName: ${NAME}
+Translation:
+  - langID: 0
+    charsetID: 1200
+  - langID: 1033
+    charsetID: 1252
+EOM
+pyinstallerFileVersionINFO="file_version_info.txt"
+create-version-file "${pyinstallerVersionYAML}" --outfile "${pyinstallerFileVersionINFO}"
+
+# remove previous package if it exists in directory
+if [ -f "${binariesFolderPath}/${binaryName}.dmg" ]; then
+    rm -f "${binariesFolderPath}/${binaryName}.dmg"
+fi
+
 pyinstaller main.py --onefile --clean --noconfirm \
   --windowed \
   --collect-all sv_ttk \
@@ -61,16 +86,16 @@ pyinstaller main.py --onefile --clean --noconfirm \
   --add-data="${IMGLIGHTPATH}/*:${IMGLIGHTPATH}/" \
   --add-data="${IMGDARKPATH}/*:${IMGDARKPATH}/" \
   --add-data="${ICONPATH}:${IMGPATH}/" \
+  --version-file "${pyinstallerFileVersionINFO}" \
   --name="${NAME}" \
   --icon="${ICONPATH}"
-# remove previous package if it exists in directory
-if [ -f "${binariesFolderPath}/${binaryName}.dmg" ]; then
-    rm -f "${binariesFolderPath}/${binaryName}.dmg"
-fi
 # package the .APP into a .DMG
 mkdir "${binariesFolderPath}/${binaryName}"
 mv "${binariesFolderPath}/${NAME}.app" "${binariesFolderPath}/${binaryName}/${NAME}.app"
 hdiutil create -srcfolder "${binariesFolderPath}/${binaryName}" "${binariesFolderPath}/${binaryName}.dmg"
+# remove temp files
+rm -f "${pyinstallerVersionYAML}"
+rm -f "${pyinstallerFileVersionINFO}"
 rm -rf "${binariesFolderPath}/${binaryName}"
 
 deactivate

@@ -128,11 +128,14 @@ class color_picker(tk.Canvas):
     def on_canvas_release(self, event):
         if self.current_circle is not None:
             self.delete(self.current_circle["id"])
-            self.current_circle["id"] = self.spawn_circle((self.current_circle["x"], self.current_circle["y"]), self.current_circle["rgb"], self.unselected_size, self.border_width_unselected_size)
+            self.current_circle["id"] = self.spawn_circle((self.current_circle["x"], self.current_circle["y"]),
+                                                          self.current_circle["rgb"], self.unselected_size, self.border_width_unselected_size)
             self.current_circle = None
 
     def is_within_circle(self, x, y, circle, mod=2):
-        return (circle["x"] - (self.unselected_size + mod) <= x <= circle["x"] + (self.unselected_size + mod) and circle["y"] - (self.unselected_size + mod) <= y <= circle["y"] + (self.unselected_size + mod))
+        leftProduct = circle["x"] - (self.unselected_size + mod) <= x <= circle["x"] + (self.unselected_size + mod)
+        rightProduct = circle["y"] - (self.unselected_size + mod) <= y <= circle["y"] + (self.unselected_size + mod)
+        return (leftProduct and rightProduct)
 
     def generate_color_picker_canvas(self):
         img = Image.new("RGBA", (self.width, self.height))
@@ -271,7 +274,8 @@ class space_tab(ttk.Frame):
         color_pick_frame = ttk.Frame(color_pick_tab_frame, background=None, borderwidth=5, relief="solid")
         color_pick_frame.pack(side="top")
         # Pass canvas_h and canvas_w to color_picker
-        color_pick = color_picker(color_pick_frame, f"res/img/{self.window_color_mode}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
+        color_pick = color_picker(color_pick_frame,
+                                  f"res/img/{self.window_color_mode}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
         color_pick.pack()
 
         colorPickTabFrameAlphaValue = 1

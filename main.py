@@ -231,6 +231,7 @@ class ImageButton:
         self.button = ttk.Button(button_frame, image=self.button_imgtk, command=command_function)
         self.button.image = self.button_imgtk  # Keep a reference to the image
         self.button.config(image=self.button_imgtk)
+
     def pack(self, **kwargs):
         self.button.pack(**kwargs)
 
@@ -245,12 +246,24 @@ class tab_bar(ttk.Notebook):
         self.canvas_h, self.canvas_w = (335, 335)
         self.arc_api = arc_api
 
+        # BooleanVar to track the checkbox state
+        self.auto_restart_var = tk.BooleanVar(value=self.arc_api.auto_restart_arc)
+
         for i in range(tabs):
             tab_instance = tab_class(self, self.arc_api)
             space_name = self.arc_api.get_space_name(i)
             if not space_name:
                 space_name = f"Space {i+1}"
             self.add(tab_instance, text=space_name)
+        
+        self.bind('<<NotebookTabChanged>>', self.on_tab_change)
+
+    def on_tab_change(self, event):
+        tab = event.widget.tab('current')
+
+    def set_auto_restart_arc(self):
+        # Update the auto_restart_arc attribute in arc_api
+        self.arc_api.set_auto_restart_arc(self.auto_restart_var.get())
 
 
 
@@ -258,20 +271,23 @@ class tab_bar(ttk.Notebook):
 class space_tab(ttk.Frame):
     def __init__(self, notebook, arc_api, *args, **kwargs):
         super().__init__(notebook, *args, **kwargs)
+
         def slider_set_alpha(value):
             color_pick.set_alpha(float(value))
+
         def slider_set_intensity(value):
             print(value)
             color_pick.set_intensity(float(value))
+
         # Accessing canvas_h and canvas_w from the parent (tab_bar)
         self.canvas_h = notebook.canvas_h
         self.canvas_w = notebook.canvas_w
         self.window_color_mode = notebook.window_color_mode
         self.arc_api = arc_api
         color_pick_tab_frame = ttk.Frame(self, background=None)
-        color_pick_tab_frame.pack(side="top", padx=10, pady=10)
+        color_pick_tab_frame.pack(side="top", padx=10, pady=10, expand=True)
 
-        color_pick_frame = ttk.Frame(color_pick_tab_frame, background=None, borderwidth=5, relief="solid")
+        color_pick_frame = ttk.Frame(color_pick_tab_frame, background=None)
         color_pick_frame.pack(side="top")
         # Pass canvas_h and canvas_w to color_picker
         color_pick = color_picker(color_pick_frame,
@@ -284,32 +300,47 @@ class space_tab(ttk.Frame):
         #else:
             #color_pick_tab_frame.attributes('-alpha', colorPickTabFrameAlphaValue)
 
-        button_frame = ttk.Frame(color_pick_tab_frame)
-        button_frame.pack(side="top")
-        button_frame2 = ttk.Frame(button_frame)
-        button_frame2.pack(side="left")
-        minus_button = ImageButton(button_frame2, f"res/img/{self.window_color_mode}/minus_button.png", color_pick.remove_color)
-        minus_button.pack(pady=5, padx=5, side="left")
-        slider_frame = ttk.Frame(button_frame)
+        # frames
+        controls_frame = ttk.Frame(color_pick_tab_frame)
+        controls_frame.pack(side="top")
+        options_frame = ttk.Frame(color_pick_tab_frame)
+        options_frame.pack(side="bottom")
+        button_frame = ttk.Frame(controls_frame)
+        button_frame.pack(side="left")
+        slider_frame = ttk.Frame(controls_frame)
         slider_frame.pack(side="right")
-        theme_button = ImageButton(button_frame2, f"res/img/{self.window_color_mode}/set_theme.png", color_pick.set_theme)
+
+        # buttons
+        minus_button = ImageButton(button_frame, f"res/img/{self.window_color_mode}/minus_button.png", color_pick.remove_color)
+        minus_button.pack(pady=5, padx=5, side="left")
+
+        theme_button = ImageButton(button_frame, f"res/img/{self.window_color_mode}/set_theme.png", color_pick.set_theme)
         theme_button.pack(pady=5, padx=5, side="left")
-        plus_button = ImageButton(button_frame2, f"res/img/{self.window_color_mode}/plus_button.png", color_pick.add_color)
+
+        plus_button = ImageButton(button_frame, f"res/img/{self.window_color_mode}/plus_button.png", color_pick.add_color)
         plus_button.pack(pady=5, padx=5, side="left")
 
-        slider_alpha_frame = ttk.Frame(button_frame)
+        # sliders
+        slider_alpha_frame = ttk.Frame(controls_frame)
         slider_alpha_frame.pack(side="top")
         alpha_label = ttk.Label(slider_alpha_frame, text="Opacity")
         alpha_label.pack(pady=5, padx=5, side="left")
         slider = ttk.Scale(slider_alpha_frame, from_=0, to=100, command=slider_set_alpha)
         slider.pack(pady=5, padx=5, side="right")
 
-        slider_transparency_frame = ttk.Frame(button_frame)
+        slider_transparency_frame = ttk.Frame(controls_frame)
         slider_transparency_frame.pack(side="bottom")
         transparency_label = ttk.Label(slider_transparency_frame, text="Intensity")
         transparency_label.pack(pady=5, padx=5, side="left")
         slider2 = ttk.Scale(slider_transparency_frame, from_=0, to=100, command=slider_set_intensity)
         slider2.pack(pady=5, padx=5, side="right")
+
+        # checkboxes (uses the notebox to store and update auto restart value)
+        check_box = ttk.Checkbutton(options_frame, text="Auto Restart Arc",
+                                    variable=notebook.auto_restart_var,
+                                    command=notebook.set_auto_restart_arc)
+        #check_box.pack(pady=(0, 10), side="bottom")
+        check_box.pack(side="bottom")
 
         notebook.tabs_count += 1
 
@@ -324,46 +355,30 @@ class Arc_Palette(tk.Tk):
         self.title("Arc Palette")
 
         # setting x dimensions any lower will result in canvas being cut off
-        # reason it is an odd number is due to canvas: size, padding, and borderwidth
-        self.geometry("367x520")
-        self.minsize(367, 520)
+        # changing the following also can affect things: size, padding, and borderwidth
+        # with no border, this odd number aligns perfectly with the rest of the frames in view
+        minX = 357
+        minY = 490
+        self.geometry("{}x{}".format(minX, minY))
+        self.minsize(minX, minY)
 
         self.arc_api = arc_API()
         self.spaces_num = self.arc_api.get_number_of_spaces()
         self.tab_count = 0
 
-        # BooleanVar to track the checkbox state
-        self.auto_restart_var = tk.BooleanVar(value=self.arc_api.auto_restart_arc)
-
-        check_box_frame = ttk.Frame(self)
-        check_box_frame.pack(side="bottom", fill="both", expand=True)
+        # Setup main GUI
+        acrylicAlphaValue = 0.7
 
         notebook = tab_bar(self, self.spaces_num, space_tab, self.arc_api, self.window_color_mode)
-        notebook.pack(fill="both", expand=True)
+        notebook.pack(side="top", fill="both", expand=True)
 
-        notebookAlphaValue = 0.7
+        # apply transparency
         if utils.is_windows():
-            pywinstyles.set_opacity(notebook, value=notebookAlphaValue)
+            pywinstyles.set_opacity(notebook, value=acrylicAlphaValue)
         #else:
             #notebook.attributes('-alpha', notebookAlphaValue)
 
-        # Checkbox for Auto Restart Arc
-        check_box = ttk.Checkbutton(check_box_frame, text="Auto Restart Arc",
-                                    variable=self.auto_restart_var,
-                                    command=self.set_auto_restart_arc)
-        check_box.pack()
-
-        checkBoxFrameAlphaValue = 0.7
-        if utils.is_windows():
-            pywinstyles.set_opacity(check_box_frame, value=checkBoxFrameAlphaValue)
-        #else:
-            #check_box_frame.attributes('-alpha', checkBoxFrameAlphaValue)
-
         self.apply_window_theme()
-
-    def set_auto_restart_arc(self):
-        # Update the auto_restart_arc attribute in arc_api
-        self.arc_api.set_auto_restart_arc(self.auto_restart_var.get())
 
     def apply_window_theme(self):
         # set light/dark theme and give window transparency blur effects
@@ -394,5 +409,5 @@ if __name__ == "__main__":
     #       - the background image of the canvas
     #       - outlines of pre-existing circles on the canvas
     # NOTE: TransparentCanvas doesn't appear to be used anywhere? That should be figured out
-    #arc_palette.monitor_system_theme() 
+    #arc_palette.monitor_system_theme()
     arc_palette.mainloop()

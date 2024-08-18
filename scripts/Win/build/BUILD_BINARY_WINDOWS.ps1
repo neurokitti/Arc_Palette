@@ -13,7 +13,7 @@ Set-Location ..\..\..
 # change details here
 $NAME = "Arc Palette"
 $DESCRIPTION = "Arc Palette is a community-developed application that applies advanced gradient effects to spaces in the Arc browser."
-$VERSION = "2.0"
+$VERSION = "0.2.1"
 $IMGPATH = "res/img"
 $IMGLIGHTPATH = "${IMGPATH}/light"
 $IMGDARKPATH = "${IMGPATH}/dark"

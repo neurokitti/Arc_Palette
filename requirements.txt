@@ -1,4 +1,4 @@
-darkdetect==0.7.1
-pillow==10.1.0
-ttkbootstrap==1.10.1
-sv_ttk==2.6.0
+darkdetect>=0.8.0
+pillow>=10.4.0
+ttkbootstrap>=1.10.1
+sv_ttk>=2.6.0

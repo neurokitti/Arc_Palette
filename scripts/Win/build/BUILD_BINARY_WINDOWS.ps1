@@ -43,7 +43,7 @@ $binaryName = "$($NAME.replace(' ', '_'))-${osArch}"
 # FileDescription: ${DESCRIPTION}
 # InternalName: ${NAME}
 # LegalCopyright: 
-# OriginalFilename: ${NAME}.exe
+# OriginalFilename: ${binaryName}.exe
 # ProductName: ${NAME}
 # Translation:
 #   - langID: 0

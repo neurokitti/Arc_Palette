@@ -10,10 +10,14 @@ Set-Location ..\..\..
 # Activating the virtual environment
 . .\.venv\Scripts\activate
 
-# change details here
-$NAME = "Arc Palette"
-$DESCRIPTION = "Arc Palette is a community-developed application that applies advanced gradient effects to spaces in the Arc browser."
-$VERSION = "0.2.3"
+# path to app config json, to read from
+$appConfigJson = "app_config.json"
+$configInfo = $(Get-Content $appConfigJson)
+
+# change details in the config, not here
+$VERSION = $(Write-Output $configInfo | python -c 'import json,sys;print(json.load(sys.stdin)["VERSION"])')
+$NAME = $(Write-Output $configInfo | python -c 'import json,sys;print(json.load(sys.stdin)["NAME"])')
+$DESCRIPTION = $(Write-Output $configInfo | python -c 'import json,sys;print(json.load(sys.stdin)["DESCRIPTION"])')
 $IMGPATH = "res/img"
 $IMGLIGHTPATH = "${IMGPATH}/light"
 $IMGDARKPATH = "${IMGPATH}/dark"

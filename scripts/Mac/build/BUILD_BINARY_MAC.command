@@ -13,7 +13,7 @@ source .venv/bin/activate
 # change details here
 NAME="Arc Palette"
 DESCRIPTION="Arc Palette is a community-developed application that applies advanced gradient effects to spaces in the Arc browser."
-VERSION="2.0"
+VERSION="0.2.1"
 IMGPATH="res/img"
 IMGLIGHTPATH="${IMGPATH}/light"
 IMGDARKPATH="${IMGPATH}/dark"
@@ -42,16 +42,16 @@ binaryName="${NAME// /_}-${osArch}"
 #  --include-data-files="${ICONPATH}=${ICONPATH}" \
 #  --include-data-dir="${IMGLIGHTPATH}=${IMGLIGHTPATH}" \
 #  --include-data-dir="${IMGDARKPATH}=${IMGDARKPATH}" \
-#  --file-version="${VERSION}" --product-version="${VERSION}" \
+#  --file-version="${VERSION}" --product-version="${VERSION}" --macos-app-version="${VERSION}" \
 #  --file-description="${DESCRIPTION}" \
 #  --product-name="${NAME}" --macos-app-name="${NAME}" \
 #  --output-filename="${NAME}" \
 #  --output-dir="${binariesFolderPath}"
 # package the .APP into a .DMG
-#mkdir "binaries/${binaryName}"
-#mv "binaries/${NAME}.app" "binaries/${binaryName}/${NAME}.app"
-#hdiutil create -srcfolder "binaries/${binaryName}" "binaries/${binaryName}.dmg"
-#rm -rf "binaries/${binaryName}"
+#mkdir "${binariesFolderPath}/${binaryName}"
+#mv "${binariesFolderPath}/${NAME}.app" "${binariesFolderPath}/${binaryName}/${NAME}.app"
+#hdiutil create -srcfolder "${binariesFolderPath}/${binaryName}" "${binariesFolderPath}/${binaryName}.dmg"
+#rm -rf "${binariesFolderPath}/${binaryName}"
 
 # Have to keep using pyinstaller for the interim, which has less options... #### TODO Might need to do more --collect-all ...
 pyinstaller main.py --onefile --clean --noconfirm \
@@ -64,13 +64,13 @@ pyinstaller main.py --onefile --clean --noconfirm \
   --name="${NAME}" \
   --icon="${ICONPATH}"
 # remove previous package if it exists in directory
-if [ -f "dist/${binaryName}.dmg" ]; then
-    rm -f "dist/${binaryName}.dmg"
+if [ -f "${binariesFolderPath}/${binaryName}.dmg" ]; then
+    rm -f "${binariesFolderPath}/${binaryName}.dmg"
 fi
 # package the .APP into a .DMG
-mkdir "dist/${binaryName}"
-mv "dist/${NAME}.app" "dist/${binaryName}/${NAME}.app"
-hdiutil create -srcfolder "dist/${binaryName}" "dist/${binaryName}.dmg"
-rm -rf "dist/${binaryName}"
+mkdir "${binariesFolderPath}/${binaryName}"
+mv "${binariesFolderPath}/${NAME}.app" "${binariesFolderPath}/${binaryName}/${NAME}.app"
+hdiutil create -srcfolder "${binariesFolderPath}/${binaryName}" "${binariesFolderPath}/${binaryName}.dmg"
+rm -rf "${binariesFolderPath}/${binaryName}"
 
 deactivate

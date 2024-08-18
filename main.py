@@ -313,7 +313,7 @@ class space_tab(ttk.Frame):
 
 
 class Arc_Palette(tk.Tk):
-    def __init__(self, window_color_mode):
+    def __init__(self, window_color_mode="light"):
         super().__init__()
         self.window_color_mode = window_color_mode
         self.iconbitmap(utils.resource_path("res/img/icon.ico" if utils.is_windows() else "res/img/icon.icns"))
@@ -363,16 +363,32 @@ class Arc_Palette(tk.Tk):
 
     def apply_window_theme(self):
         # set light/dark theme and give window transparency blur effects
-        sv_ttk.set_theme(theme)
+        sv_ttk.set_theme(self.window_color_mode)
         if utils.is_windows():
             pywinstyles.apply_style(self, "acrylic")
         #else:
             #self.attributes('-alpha', 0.9)
 
+    def monitor_system_theme(self):
+        # automatically fix theme when system theme changes
+        theme = (darkdetect.theme()).lower()
+        if self.window_color_mode != theme:
+            self.window_color_mode = theme
+            self.apply_window_theme()
+        self.after(100, self.monitor_system_theme)
+
 
 
 
 if __name__ == "__main__":
-    theme = (darkdetect.theme()).lower() # darkdetect doesn't use lowercase
-    arc_palette = Arc_Palette(theme)
+    theme = (darkdetect.theme()).lower()
+    arc_palette = Arc_Palette()
+    # TODO: many aspects of the UI needs ways to update configuration when system theme changes while
+    #       app is in use, and some basic boilerplate code is in place, which changes the majority of
+    #       the theme, except:
+    #       - images loaded in for the buttons
+    #       - the background image of the canvas
+    #       - outlines of pre-existing circles on the canvas
+    # NOTE: TransparentCanvas doesn't appear to be used anywhere? That should be figured out
+    #arc_palette.monitor_system_theme() 
     arc_palette.mainloop()

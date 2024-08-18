@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+#Requires -Version 7
 # You can run this file with the "BUILD_BINARY_WINDOWS.bat" script, or use extract the command from the .bat to use manually to launch this script
 
 # .ps1 files change directory, need to open to directory where script launched from

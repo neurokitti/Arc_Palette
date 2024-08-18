@@ -1,2 +1,4 @@
-nuitka>=2.4.5
-pywinstyles==1.8
+#pyinstaller>=6.10.0
+#pyinstaller_versionfile>=2.1.1
+nuitka>=2.4.7
+pywinstyles>=1.8

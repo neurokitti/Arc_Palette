@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+#Requires -Version 7
 # You can run this file with the "BUILD_BINARY_WINDOWS.bat" script, or use extract the command from the .bat to use manually to launch this script
 
 # .ps1 files change directory, need to open to directory where script launched from
@@ -13,7 +13,7 @@ Set-Location ..\..\..
 # change details here
 $NAME = "Arc Palette"
 $DESCRIPTION = "Arc Palette is a community-developed application that applies advanced gradient effects to spaces in the Arc browser."
-$VERSION = "0.2.1"
+$VERSION = "0.2.3"
 $IMGPATH = "res/img"
 $IMGLIGHTPATH = "${IMGPATH}/light"
 $IMGDARKPATH = "${IMGPATH}/dark"
@@ -35,17 +35,40 @@ $binaryName = "$($NAME.replace(' ', '_'))-${osArch}"
 
 # Former compiler: pyinstaller build command
 
+# # create temp files
+# $pyinstallerVersionYAML = "metadata.yml"
+# @"
+# Version: ${VERSION}
+# CompanyName: 
+# FileDescription: ${DESCRIPTION}
+# InternalName: ${NAME}
+# LegalCopyright: 
+# OriginalFilename: ${NAME}.exe
+# ProductName: ${NAME}
+# Translation:
+#   - langID: 0
+#     charsetID: 1200
+#   - langID: 1033
+#     charsetID: 1252
+# "@ | Out-File $pyinstallerVersionYAML -Encoding UTF8
+# $pyinstallerFileVersionINFO = "file_version_info.txt"
+# create-version-file $pyinstallerVersionYAML --outfile $pyinstallerFileVersionINFO
+#
 # pyinstaller main.py --onefile --clean --noconfirm \
 #   --windowed \
 #   --collect-all sv_ttk \
 #   --add-data="utils.py;." \
-#  --add-data="${IMGLIGHTPATH}/*;${IMGLIGHTPATH}/" \
-#  --add-data="${IMGDARKPATH}/*;${IMGDARKPATH}/" \
-#  --add-data="${ICONPATH};${IMGPATH}/" \
-#  --name="${NAME}" \
-#  --icon="${ICONPATH}"
+#   --add-data="${IMGLIGHTPATH}/*;${IMGLIGHTPATH}/" \
+#   --add-data="${IMGDARKPATH}/*;${IMGDARKPATH}/" \
+#   --add-data="${ICONPATH};${IMGPATH}/" \
+#   --version-file "${pyinstallerFileVersionINFO}" \
+#   --name="${NAME}" \
+#   --icon="${ICONPATH}"
+# # remove temp files
+# rm -f $pyinstallerVersionYAML
+# rm -f $pyinstallerFileVersionINFO
 
-# WARNING: Nuitka requires the non-store install of Python to work properly!!!
+# WARNING: Nuitka requires the non-"Microsoft Store" install of Python to work properly!!!
 
 # Note: This will auto download/cache the required compiler and linker for Nuitka if one or both are not available on the computer
 nuitka main.py --onefile --windows-console-mode=attach --remove-output --assume-yes-for-downloads --follow-imports `

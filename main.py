@@ -51,9 +51,37 @@ class color_picker(tk.Canvas):
         self.circles = []
         self.current_circle = None
         self.circle_outline_color = "grey11" if theme == "dark" else "grey98"
-                                   # colors above match transparency of background
-                                   # colors below are ideal when not using transparency
-                                   #"black" if theme == "dark" else "white"
+                                   # The colors above match transparency of background, (due to the colors used by the `sv_ttk` light/dark themes not meshing
+                                   # with `pywinstyles` acrylic). Those specific colors used are the background colors for `sv_ttk`'s light/dark themes.
+                                   #
+                                   # Another thing to mention, due to how acrylic works in Windows, black becomes the color to be full translucent blur, while
+                                   # white (or full value of a color in terms of HSV) becomes the color to be fully opaque (no transluceny). This is also why
+                                   # I had to do some funky things to the `dot_pad.png` pictures for both to work with acrylic.
+                                   #
+                                   # By setting `color_pick_tab_frame` and `notebook` to have different alpha values, by default it will still use black
+                                   # as the color to turn translucent blur.
+                                   # What we should be doing instead is just setting the alpha level on just the `notebook`, and remove the alpha level from
+                                   # `color_pick_tab_frame`.
+                                   # Then, we need to set two options on the `color_pick` widget
+                                   #
+                                   # NOTE: Arylic doesn't technically have a dark/light theme, it's just translucency.
+                                   #
+                                   #       We need to correctly make the theme for acrylic to match from a range of black (full translucent blur) to white
+                                   #       (no transluceny) colors in the UI. This also means we'll need another `dot_pad.png` for the acrylic option that plays
+                                   #       well with the restrictions mentioned with how Windows treats colors when using acrylic for UI. Additionally, we would
+                                   #       then want to make sure to adjust the colors above to change appropriately for light/dark/acrylic (but the colors for 
+                                   #       light and dark have already been figured out above, so it's just a matter of fiddling with a color for acrylic, 
+                                   #       which requires creating a custom color scheme to use with `pywinstyles`).
+                                   #
+                                   #       When it comes to selecting a theme for the app, it should show System, Light, Dark, and Arylic all as separate options.
+                                   #       (Acrylic is a separate option, since dark and light doesn't affect how it appears in the system, see Windows Terminal
+                                   #       as an example application with this turned on).
+                                   #
+                                   #       What we might want to do for the Acrylic theme, is implement a translucncy slider (like how Windows Terminal does it),
+                                   #       but that might take more work to do, depending on how I need to alter the current `sv_ttk` theme to be compatible
+                                   #       with acrylic.
+                                   #
+                                   #       - Drew
 
         # Default Settings
         self.mode = "light"

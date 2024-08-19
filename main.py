@@ -62,24 +62,24 @@ class color_picker(tk.Canvas):
                                    # as the color to turn translucent blur.
                                    # What we should be doing instead is just setting the alpha level on just the `notebook`, and remove the alpha level from
                                    # `color_pick_tab_frame`.
-                                   # Then, we need to set two options on the `color_pick` widget
+                                   # Then, see my further comments below around `color_pick` in the program for other steps that would need to be taken.
                                    #
-                                   # NOTE: Arylic doesn't technically have a dark/light theme, it's just translucency.
+                                   # NOTE: Arylic doesn't technically have a dark/light theme, it's just translucency. Dark/light only affects the blending onto
+                                   #       the translucent area.
                                    #
-                                   #       We need to correctly make the theme for acrylic to match from a range of black (full translucent blur) to white
-                                   #       (no transluceny) colors in the UI. This also means we'll need another `dot_pad.png` for the acrylic option that plays
-                                   #       well with the restrictions mentioned with how Windows treats colors when using acrylic for UI. Additionally, we would
-                                   #       then want to make sure to adjust the colors above to change appropriately for light/dark/acrylic (but the colors for 
-                                   #       light and dark have already been figured out above, so it's just a matter of fiddling with a color for acrylic, 
-                                   #       which requires creating a custom color scheme to use with `pywinstyles`).
+                                   #       We need to correctly make 2 color schemes for acrylic to work right, e.g. for "dark mode" from a range of black (full
+                                   #       translucent blur) to white (no transluceny) colors in the UI. This also means we'll need another `dot_pad.png` for
+                                   #       both acrylic theme options so they both play well with the restrictions mentioned with how Windows treats colors when
+                                   #       using acrylic for UI. Additionally, we would then want to make sure to adjust the colors above to change appropriately
+                                   #       for light/dark/acrylic (but the colors for light and dark have already been figured out above, so it's just a matter
+                                   #       of fiddling with a color for acrylic, which requires creating a custom color scheme to use with `pywinstyles`).
                                    #
-                                   #       When it comes to selecting a theme for the app, it should show System, Light, Dark, and Arylic all as separate options.
-                                   #       (Acrylic is a separate option, since dark and light doesn't affect how it appears in the system, see Windows Terminal
-                                   #       as an example application with this turned on).
+                                   #       When it comes to selecting a theme for the app, it should show System, Light, and Dark. Then, there should be a toggle
+                                   #       for turning on/off Arylic.
                                    #
-                                   #       What we might want to do for the Acrylic theme, is implement a translucncy slider (like how Windows Terminal does it),
+                                   #       What we might want to do for the Acrylic theme, is implement a translucency slider (like how Windows Terminal does it),
                                    #       but that might take more work to do, depending on how I need to alter the current `sv_ttk` theme to be compatible
-                                   #       with acrylic.
+                                   #       with acrylic in both light/dark mode.
                                    #
                                    #       - Drew
 

@@ -51,28 +51,76 @@ class color_picker(tk.Canvas):
         self.circles = []
         self.current_circle = None
         self.circle_outline_color = "grey11" if theme == "dark" else "grey98"
-                                   # colors above match transparency of background
-                                   # colors below are ideal when not using transparency
-                                   #"black" if theme == "dark" else "white"
+                                   # The colors above match transparency of background, (due to the colors used by the `sv_ttk` light/dark themes not meshing
+                                   # with `pywinstyles` acrylic). Those specific colors used are the background colors for `sv_ttk`'s light/dark themes.
+                                   #
+                                   # Another thing to mention, due to how acrylic works in Windows, black becomes the color to be full translucent blur, while
+                                   # white (or full value of a color in terms of HSV) becomes the color to be fully opaque (no transluceny). This is also why
+                                   # I had to do some funky things to the `dot_pad.png` pictures for both to work with acrylic.
+                                   #
+                                   # By setting `color_pick_tab_frame` and `notebook` to have different alpha values, by default it will still use black
+                                   # as the color to turn translucent blur.
+                                   # What we should be doing instead is just setting the alpha level on just the `notebook`, and remove the alpha level from
+                                   # `color_pick_tab_frame`.
+                                   # Then, see my further comments below around `color_pick` in the program for other steps that would need to be taken.
+                                   #
+                                   # NOTE: Arylic doesn't technically have a dark/light theme, it's just translucency. Dark/light only affects the blending onto
+                                   #       the translucent area.
+                                   #
+                                   #       We need to correctly make 2 color schemes for acrylic to work right, e.g. for "dark mode" from a range of black (full
+                                   #       translucent blur) to white (no transluceny) colors in the UI. This also means we'll need another `dot_pad.png` for
+                                   #       both acrylic theme options so they both play well with the restrictions mentioned with how Windows treats colors when
+                                   #       using acrylic for UI. Additionally, we would then want to make sure to adjust the colors above to change appropriately
+                                   #       for light/dark/acrylic (but the colors for light and dark have already been figured out above, so it's just a matter
+                                   #       of fiddling with a color for acrylic, which requires creating a custom color scheme to use with `pywinstyles`).
+                                   #
+                                   #       When it comes to selecting a theme for the app, it should show System, Light, and Dark. Then, there should be a toggle
+                                   #       for turning on/off Arylic.
+                                   #
+                                   #       What we might want to do for the Acrylic theme, is implement a translucency slider (like how Windows Terminal does it),
+                                   #       but that might take more work to do, depending on how I need to alter the current `sv_ttk` theme to be compatible
+                                   #       with acrylic in both light/dark mode.
+                                   #
+                                   #       - Drew
 
         # Default Settings
         self.mode = "light"
         self.alpha = 0.7
         self.intensity = 1
-
+        self.dot_grid_display_var = tk.BooleanVar(value=False)
         self.image_path = image_path
         self.img = self.generate_color_picker_canvas()
-        self.dot_grid_image = utils.path_to_img(self.image_path, (self.width, self.height))
-        self.create_image(0, 0, anchor=tk.NW, image=self.dot_grid_image)
-
+        self.generate_dot_grid_image()
+        
+        
         self.config(width=self.width, height=self.height, bg=None, highlightthickness=0)
 
         # Color Picker Detection
         self.bind("<Button-1>", self.on_canvas_click)
         self.bind("<B1-Motion>", self.on_canvas_drag)
         self.bind("<ButtonRelease-1>", self.on_canvas_release)
+    
 
+    def generate_dot_grid_image(self,):
+        if self.dot_grid_display_var.get() == True:
+            self.dot_grid_image = utils.img_to_tk(self.img, (self.width, self.height))
+            
+        else:
+            self.dot_grid_image = utils.path_to_img(self.image_path, (self.width, self.height))
+            
+        
+        self.create_image(0, 0, anchor=tk.NW, image=self.dot_grid_image)
+        self.redraw_circles()
 
+    def redraw_circles(self):
+        
+        for circle in self.circles:
+            self.current_circle = circle
+            self.delete(self.current_circle["id"])
+            self.current_circle["id"] = self.spawn_circle((self.current_circle["x"], self.current_circle["y"]),
+                                                          self.current_circle["rgb"], self.unselected_size, self.border_width_unselected_size)
+            self.current_circle = None
+            
     def get_point_data(self, limit, pos, get_rgb=True): # ensures that an 'x' and 'y' point are within the range of the canvas
         pos_x, pos_y = pos
         rgb = None
@@ -205,6 +253,10 @@ class color_picker(tk.Canvas):
 
 
 class TransparentCanvas(tk.Canvas):
+    # NOTE: Images inside of the canvas should already respect transparency (relative to the background color/image set in the canvas).
+    #       to make a certain color inside the canvas be transparent, need to use pywinstyles: `pywinstyles.set_opacity(widget_id, color="white")`
+    #       - Drew
+    # TODO: ... I have some ideas - Drew
     def __init__(self, parent, image_path, *args, **kwargs):
         # Initialize the Canvas with parent and other options
         super().__init__(parent, *args, **kwargs)
@@ -294,10 +346,37 @@ class space_tab(ttk.Frame):
                                   f"res/img/{self.window_color_mode}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
         color_pick.pack()
 
-        colorPickTabFrameAlphaValue = 1
+        colorPickTabFrameAlphaValue = 1 # All this setting does is set how transparent this widget is compared to its parent widget.
+                                        #
+                                        # Since one of the parent widgets is already set to have translucency (`notebook`) it affects all elements inside it,
+                                        # including this one.
+                                        #
+                                        # That is why the color picker itself is still translucent.
+                                        #
+                                        # To rectify that, we would have to somehow separate the canvas from the `notebook` such that they are in the same
+                                        # parent frame (in this case that would be in `Arc_Palette` as `self`), which means there's going to be complicated
+                                        # work that needs to be done there with positioning correctly in the window, and getting buttons and such working
+                                        # properly with the notebook.
+                                        #
+                                        # To keep the background of the canvas being translucent (the `dot_pad.png`), while keeping the foreground of it (the
+                                        # circle color selections) opaque, we'd need to have the `dot_pad.png` displayed behind the canvas. Then, would need to
+                                        # use a certain color for the background of the canvas for which `pywinstyles` can used to set that color to be
+                                        # transparent (this color will have to change based on a future proposed dark/light, referring to the blackground
+                                        # blending toggle in Arc, for the theme generating).
+                                        #
+                                        # For Arc's background blending mode, "light" has white as a pickable color while "dark" has black as a pickable color.
+                                        # If we refer to "white" and "black" as the "no go color" for each blending mode, then we just have to make sure to set
+                                        # the background of the canvas to the opposite "no go color" (e.g. background of the canvas while on "light" blending
+                                        # mode would need to be black), and then make sure `pywinstyles` is set to use that background color as the one to make
+                                        # transparent. Only problem with that though is now for sure the ring around the color circle will always have some form
+                                        # of transparency, which is why I suggest that the ring around the circles (only when in the acrylic theme) to be just
+                                        # HTML color "gray" (this is #808080, half way between white and black, so the transluceny effect on the canvas would be
+                                        # the same on "dark" or "light" blending mode).
+                                        #
+                                        # - Drew
         if utils.is_windows():
             pywinstyles.set_opacity(color_pick_tab_frame, value=colorPickTabFrameAlphaValue)
-        #else:
+        #else: # WIP for MacOS version - Drew
             #color_pick_tab_frame.attributes('-alpha', colorPickTabFrameAlphaValue)
 
         # frames
@@ -339,8 +418,12 @@ class space_tab(ttk.Frame):
         check_box = ttk.Checkbutton(options_frame, text="Auto Restart Arc",
                                     variable=notebook.auto_restart_var,
                                     command=notebook.set_auto_restart_arc)
+        check_box_hide_dot_grid = ttk.Checkbutton(options_frame, text="Hide Dot Grid",
+                                    variable=color_pick.dot_grid_display_var,
+                                    command=color_pick.generate_dot_grid_image)
         #check_box.pack(pady=(0, 10), side="bottom")
         check_box.pack(side="bottom")
+        check_box_hide_dot_grid.pack(side="bottom")
 
         notebook.tabs_count += 1
 
@@ -358,7 +441,7 @@ class Arc_Palette(tk.Tk):
         # changing the following also can affect things: size, padding, and borderwidth
         # with no border, this odd number aligns perfectly with the rest of the frames in view
         minX = 357
-        minY = 490
+        minY = 520
         self.geometry("{}x{}".format(minX, minY))
         self.minsize(minX, minY)
 
@@ -375,7 +458,7 @@ class Arc_Palette(tk.Tk):
         # apply transparency
         if utils.is_windows():
             pywinstyles.set_opacity(notebook, value=acrylicAlphaValue)
-        #else:
+        #else: # WIP for MacOS version - Drew
             #notebook.attributes('-alpha', notebookAlphaValue)
 
         self.apply_window_theme()
@@ -385,7 +468,7 @@ class Arc_Palette(tk.Tk):
         sv_ttk.set_theme(self.window_color_mode)
         if utils.is_windows():
             pywinstyles.apply_style(self, "acrylic")
-        #else:
+        #else: # WIP for MacOS version - Drew
             #self.attributes('-alpha', 0.9)
 
     def monitor_system_theme(self):
@@ -408,6 +491,5 @@ if __name__ == "__main__":
     #       - images loaded in for the buttons
     #       - the background image of the canvas
     #       - outlines of pre-existing circles on the canvas
-    # NOTE: TransparentCanvas doesn't appear to be used anywhere? That should be figured out
     #arc_palette.monitor_system_theme()
     arc_palette.mainloop()

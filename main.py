@@ -87,20 +87,40 @@ class color_picker(tk.Canvas):
         self.mode = "light"
         self.alpha = 0.7
         self.intensity = 1
-
+        self.dot_grid_display_var = tk.BooleanVar(value=False)
         self.image_path = image_path
         self.img = self.generate_color_picker_canvas()
-        self.dot_grid_image = utils.path_to_img(self.image_path, (self.width, self.height))
-        self.create_image(0, 0, anchor=tk.NW, image=self.dot_grid_image)
-
+        self.generate_dot_grid_image()
+        
+        
         self.config(width=self.width, height=self.height, bg=None, highlightthickness=0)
 
         # Color Picker Detection
         self.bind("<Button-1>", self.on_canvas_click)
         self.bind("<B1-Motion>", self.on_canvas_drag)
         self.bind("<ButtonRelease-1>", self.on_canvas_release)
+    
 
+    def generate_dot_grid_image(self,):
+        if self.dot_grid_display_var.get() == True:
+            self.dot_grid_image = utils.img_to_tk(self.img, (self.width, self.height))
+            
+        else:
+            self.dot_grid_image = utils.path_to_img(self.image_path, (self.width, self.height))
+            
+        
+        self.create_image(0, 0, anchor=tk.NW, image=self.dot_grid_image)
+        self.redraw_circles()
 
+    def redraw_circles(self):
+        
+        for circle in self.circles:
+            self.current_circle = circle
+            self.delete(self.current_circle["id"])
+            self.current_circle["id"] = self.spawn_circle((self.current_circle["x"], self.current_circle["y"]),
+                                                          self.current_circle["rgb"], self.unselected_size, self.border_width_unselected_size)
+            self.current_circle = None
+            
     def get_point_data(self, limit, pos, get_rgb=True): # ensures that an 'x' and 'y' point are within the range of the canvas
         pos_x, pos_y = pos
         rgb = None
@@ -398,8 +418,12 @@ class space_tab(ttk.Frame):
         check_box = ttk.Checkbutton(options_frame, text="Auto Restart Arc",
                                     variable=notebook.auto_restart_var,
                                     command=notebook.set_auto_restart_arc)
+        check_box_hide_dot_grid = ttk.Checkbutton(options_frame, text="Hide Dot Grid",
+                                    variable=color_pick.dot_grid_display_var,
+                                    command=color_pick.generate_dot_grid_image)
         #check_box.pack(pady=(0, 10), side="bottom")
         check_box.pack(side="bottom")
+        check_box_hide_dot_grid.pack(side="bottom")
 
         notebook.tabs_count += 1
 
@@ -417,7 +441,7 @@ class Arc_Palette(tk.Tk):
         # changing the following also can affect things: size, padding, and borderwidth
         # with no border, this odd number aligns perfectly with the rest of the frames in view
         minX = 357
-        minY = 490
+        minY = 520
         self.geometry("{}x{}".format(minX, minY))
         self.minsize(minX, minY)
 

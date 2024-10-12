@@ -26,8 +26,13 @@ def resource_path(relative_path):
         return os.path.join(base_path, relative_path)
 
 def path_to_img(image_path, size):
-    width, height = size
+    
     image = Image.open(resource_path(image_path))
+    
+    return img_to_tk(image,size)
+
+def img_to_tk(image,size):
+    width, height = size
     display_img = image.resize((width, height))
     tk_image = ImageTk.PhotoImage(display_img)
     return tk_image

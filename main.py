@@ -84,7 +84,7 @@ class color_picker(tk.Canvas):
                                    #       - Drew
 
         # Default Settings
-        self.mode = "dark"
+        self.mode = "light"
         self.alpha = 0.7
         self.intensity = 1
         self.display_image_var = tk.BooleanVar(value=False)

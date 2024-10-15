@@ -27,7 +27,7 @@ import utils
 
 
 class color_picker(tk.Canvas):
-    def __init__(self, parent, image_path, size, arc_api, max_colors=10, tab=0, *args, **kwargs):
+    def __init__(self, parent, dot_pad_path, colour_image_path, display_image_path, size, arc_api, max_colors=10, tab=0, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
 
         # Arguments
@@ -87,10 +87,12 @@ class color_picker(tk.Canvas):
         self.mode = "light"
         self.alpha = 0.7
         self.intensity = 1
-        self.dot_grid_display_var = tk.BooleanVar(value=False)
-        self.image_path = image_path
-        self.img = self.generate_color_picker_canvas()
-        self.generate_dot_grid_image()
+        self.display_image_var = tk.BooleanVar(value=False)
+        self.dotpad_img = utils.path_to_tk(dot_pad_path, (self.width, self.height))
+        self.colour_img = utils.path_to_img(colour_image_path)
+        self.display_img= utils.path_to_tk(display_image_path, (self.width, self.height))
+        
+        self.set_display_image()
         
         
         self.config(width=self.width, height=self.height, bg=None, highlightthickness=0)
@@ -101,15 +103,15 @@ class color_picker(tk.Canvas):
         self.bind("<ButtonRelease-1>", self.on_canvas_release)
     
 
-    def generate_dot_grid_image(self,):
-        if self.dot_grid_display_var.get() == True:
-            self.dot_grid_image = utils.img_to_tk(self.img, (self.width, self.height))
+    def set_display_image(self,):
+        if self.display_image_var.get() == True:
             
+            self.display_image = self.display_img
         else:
-            self.dot_grid_image = utils.path_to_img(self.image_path, (self.width, self.height))
+            self.display_image = self.dotpad_img
             
         
-        self.create_image(0, 0, anchor=tk.NW, image=self.dot_grid_image)
+        self.create_image(0, 0, anchor=tk.NW, image=self.display_image)
         self.redraw_circles()
 
     def redraw_circles(self):
@@ -185,23 +187,14 @@ class color_picker(tk.Canvas):
         rightProduct = circle["y"] - (self.unselected_size + mod) <= y <= circle["y"] + (self.unselected_size + mod)
         return (leftProduct and rightProduct)
 
-    def generate_color_picker_canvas(self):
-        img = Image.new("RGBA", (self.width, self.height))
-        draw = ImageDraw.Draw(img)
-        for y in range(self.height):
-            for x in range(self.width):
-                r = int((x/self.width) * 255)
-                g = int((y/self.height) * 255)
-                b = 255 - int(((x/self.width) + (y/self.height)) / 2 * 255)
-                draw.point((x, y), (r, g, b, 255))
-        return img
-
     def get_rgb_at_coordinate(self, x, y):
         x = min(max(x, 0), self.width - 1)
         y = min(max(y, 0), self.height - 1)
-        image = self.img
-        image = image.convert("RGB")
-        rgb = image.getpixel((x, y))
+        image = self.colour_img
+        resized_img = image.resize((self.width,self.height))
+
+        resized_img = resized_img.convert("RGB")
+        rgb = resized_img.getpixel((x, y))
         return rgb
 
     def add_color(self, x=None, y=None):
@@ -232,7 +225,11 @@ class color_picker(tk.Canvas):
         for id, circle in enumerate(self.circles):
             colors.append((circle["rgb"][0], circle["rgb"][1], circle["rgb"][2], self.alpha))
         print(len(colors))
-        if len(colors) < 2:
+        if len(colors) < 1:
+            print("windows theme color")
+            print(colors)
+            self.arc_api.set_space_theme_color(self.tab, "none", colors, self.mode, intensityFactor=self.intensity)
+        elif len(colors) < 2:
             print("single color")
             print(colors)
             self.arc_api.set_space_theme_color(self.tab, "blendedSingleColor", colors, self.mode, intensityFactor=self.intensity)
@@ -291,23 +288,41 @@ class ImageButton:
 
 
 class tab_bar(ttk.Notebook):
-    def __init__(self, parent, tabs, tab_class, arc_api, window_color_mode, *args, **kwargs):
+    def __init__(self, parent, tabs, tab_class, arc_api, window_color_mode,show_space_name=True,show_space_number=False, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
+        self.show_space_name = show_space_name
+        self.show_space_number = show_space_number
         self.window_color_mode = window_color_mode
         self.tabs_count = 0
         self.canvas_h, self.canvas_w = (335, 335)
         self.arc_api = arc_api
-
+        self.parent = parent
         # BooleanVar to track the checkbox state
         self.auto_restart_var = tk.BooleanVar(value=self.arc_api.auto_restart_arc)
 
         for i in range(tabs):
             tab_instance = tab_class(self, self.arc_api)
-            space_name = self.arc_api.get_space_name(i)
-            if not space_name:
+            space_icon = ""
+            if self.arc_api.get_space_icon(i) != None:
+                space_icon = self.arc_api.get_space_icon(i)[0]
+            else:
+                space_icon = "·"
+            self.add(tab_instance, text=space_icon)
+
+            if self.arc_api.get_space_name(i) != None:
+                space_name = self.arc_api.get_space_name(i)
+            else:
                 space_name = f"Space {i+1}"
-            self.add(tab_instance, text=space_name)
-        
+            
+            
+            if show_space_name == False:
+                self.add(tab_instance, text=f"{space_icon}")
+            else:
+                if show_space_number == True:
+                    self.add(tab_instance, text=f"{space_icon} {f"Space {i+1}"}")
+                else:
+                    self.add(tab_instance, text=f"{space_icon} {space_name}")
+            
         self.bind('<<NotebookTabChanged>>', self.on_tab_change)
 
     def on_tab_change(self, event):
@@ -316,7 +331,10 @@ class tab_bar(ttk.Notebook):
     def set_auto_restart_arc(self):
         # Update the auto_restart_arc attribute in arc_api
         self.arc_api.set_auto_restart_arc(self.auto_restart_var.get())
-
+    def get_window_width(self, ):
+        width = self.parent.winfo_width()
+        print(f"Window width: {width}")
+        return width
 
 
 
@@ -343,7 +361,7 @@ class space_tab(ttk.Frame):
         color_pick_frame.pack(side="top")
         # Pass canvas_h and canvas_w to color_picker
         color_pick = color_picker(color_pick_frame,
-                                  f"res/img/{self.window_color_mode}/dot_pad.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
+                                  f"res/img/{self.window_color_mode}/dot_pad.png",f"res/img/colorpicker_real.png",f"res/img/colorpicker_display.png", (self.canvas_w, self.canvas_h), self.arc_api, tab=notebook.tabs_count)
         color_pick.pack()
 
         colorPickTabFrameAlphaValue = 1 # All this setting does is set how transparent this widget is compared to its parent widget.
@@ -419,8 +437,8 @@ class space_tab(ttk.Frame):
                                     variable=notebook.auto_restart_var,
                                     command=notebook.set_auto_restart_arc)
         check_box_hide_dot_grid = ttk.Checkbutton(options_frame, text="Hide Dot Grid",
-                                    variable=color_pick.dot_grid_display_var,
-                                    command=color_pick.generate_dot_grid_image)
+                                    variable=color_pick.display_image_var,
+                                    command=color_pick.set_display_image)
         #check_box.pack(pady=(0, 10), side="bottom")
         check_box.pack(side="bottom")
         check_box_hide_dot_grid.pack(side="bottom")
@@ -440,10 +458,7 @@ class Arc_Palette(tk.Tk):
         # setting x dimensions any lower will result in canvas being cut off
         # changing the following also can affect things: size, padding, and borderwidth
         # with no border, this odd number aligns perfectly with the rest of the frames in view
-        minX = 357
-        minY = 520
-        self.geometry("{}x{}".format(minX, minY))
-        self.minsize(minX, minY)
+        
 
         self.arc_api = arc_API()
         self.spaces_num = self.arc_api.get_number_of_spaces()
@@ -452,7 +467,7 @@ class Arc_Palette(tk.Tk):
         # Setup main GUI
         acrylicAlphaValue = 0.7
 
-        notebook = tab_bar(self, self.spaces_num, space_tab, self.arc_api, self.window_color_mode)
+        notebook = tab_bar(self, self.spaces_num, space_tab, self.arc_api, self.window_color_mode, show_space_name=True, show_space_number=False)
         notebook.pack(side="top", fill="both", expand=True)
 
         # apply transparency
@@ -466,6 +481,7 @@ class Arc_Palette(tk.Tk):
     def apply_window_theme(self):
         # set light/dark theme and give window transparency blur effects
         sv_ttk.set_theme(self.window_color_mode)
+
         if utils.is_windows():
             pywinstyles.apply_style(self, "acrylic")
         #else: # WIP for MacOS version - Drew
@@ -482,8 +498,10 @@ class Arc_Palette(tk.Tk):
 
 
 
+
 if __name__ == "__main__":
     theme = (darkdetect.theme()).lower()
+    
     arc_palette = Arc_Palette(theme)
     # TODO: many aspects of the UI needs ways to update configuration when system theme changes while
     #       app is in use, and some basic boilerplate code is in place, which changes the majority of

@@ -25,7 +25,13 @@ def resource_path(relative_path):
             base_path = os.path.abspath(".")
         return os.path.join(base_path, relative_path)
 
-def path_to_img(image_path, size):
+def path_to_img(image_path,):
+    
+    image = Image.open(resource_path(image_path))
+    
+    return image
+
+def path_to_tk(image_path, size):
     
     image = Image.open(resource_path(image_path))
     

@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/8a2e4215-93d4-4965-9604-1c49fbc23780)
+
+![Screenshot 2024-10-15 010409](https://github.com/user-attachments/assets/bce01273-8eef-4222-8175-09746acb3fcb)
 
 # Arc Palette
 

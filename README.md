@@ -134,4 +134,4 @@ After it completes, if successful, there should be a `dist` folder created with 
 
 * **Valkryx** - *Frontend Developer* - [valk_ryx](https://github.com/valk-ryx)
 
-* **Andrew Larson** - *Hobbyist Developer* - [Andrew-J-Larson](https://github.com/Andrew-J-Larson)
+* **Andrew Larson** - *Hobbyist Developer + ngl the most usfull person here* - [Andrew-J-Larson](https://github.com/Andrew-J-Larson)

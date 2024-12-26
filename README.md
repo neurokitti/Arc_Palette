@@ -128,7 +128,7 @@ After it completes, if successful, there should be a `dist` folder created with 
 
 ### Credits:
 
-* **Henson Liga** - *Lead Developer and Creator* - [neurokitti](https://github.com/neurokitti)
+* **Studio Movie Girl** - *Lead Developer and Creator* - [neurokitti](https://github.com/neurokitti)
 
 * **ash.meow** - *Backend Developer (JSON Support)* - [No GitHub Profile]
 

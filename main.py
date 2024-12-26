@@ -319,7 +319,12 @@ class tab_bar(ttk.Notebook):
                 self.add(tab_instance, text=f"{space_icon}")
             else:
                 if show_space_number == True:
-                    self.add(tab_instance, text=f"{space_icon} {f"Space {i+1}"}")
+                    self.add(tab_instance, text=f"{space_icon} {f'Space {i+1}'}")
+                    # Used to be self.add(tab_instance, text=f"{space_icon} {f"Space {i+1}"}")
+                    # Looked into the main.py file in VSCode and looked up the error when the 
+                    # program wasn't working on my machine, using double quotes two times in
+                    # a single F-String can be confusing to python apparently.
+                    # - Raviable
                 else:
                     self.add(tab_instance, text=f"{space_icon} {space_name}")
             
